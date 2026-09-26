@@ -8,6 +8,7 @@ on:
         required: false
         default: true
         type: boolean
+  pull_request:
 
 permissions:
   contents: read
@@ -37,9 +38,12 @@ jobs:
       - name: Validate
         run: npm run validate
 
+      - name: Test coverage
+        run: npm run test:coverage
+
       - name: Audit dependencies
         run: npm run audit
 
       - name: Knip
-        if: ${{ inputs.run_knip }}
+        if: ${{ github.event_name == 'pull_request' || inputs.run_knip }}
         run: npm run knip
