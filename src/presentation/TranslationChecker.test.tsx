@@ -8,7 +8,13 @@
  * PO 解析は本番と同じ gettext-converter を利用し、File.text の成功・失敗だけをブラウザー境界として制御する。
  */
 
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react'
 import po2js from 'gettext-converter/po2js'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
 import App from '../App'
@@ -106,7 +112,9 @@ describe('TranslationChecker', () => {
     expect(
       screen.getByText('WTC の自動チェックでは問題が見つかりませんでした。'),
     ).toBeTruthy()
-    expect(screen.getByText('Error').nextElementSibling?.textContent).toBe('0件')
+    expect(screen.getByText('Error').nextElementSibling?.textContent).toBe(
+      '0件',
+    )
     expect(screen.getByText('Warning').nextElementSibling?.textContent).toBe(
       '0件',
     )
