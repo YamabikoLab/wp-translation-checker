@@ -157,7 +157,9 @@ describe('TranslationChecker', () => {
 
     expect(screen.getByText('1件の指摘')).toBeTruthy()
     expect(
-      screen.getByText('3-6 「下さい / 全て / 既に」などの推奨表記'),
+      screen.getByText(
+        'スタイルガイド: 3-6 「下さい / 全て / 既に」などの推奨表記',
+      ),
     ).toBeTruthy()
   })
 
