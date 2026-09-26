@@ -22,6 +22,7 @@ The current `package.json` provides these non-interactive validation commands:
 npm run format:check
 npm run lint
 npm test
+npm run test:coverage
 npm run build
 npm run validate
 npm run audit
@@ -37,14 +38,16 @@ npm run glossary:update
 - `npm run format:check` checks repository formatting with Prettier.
 - `npm run lint` runs ESLint across the repository.
 - `npm test` runs the Vitest suite once with `vitest run`.
+- `npm run test:coverage` runs the Vitest suite with V8 coverage and writes text and HTML reports. Statements, Branches, Functions, and Lines must each remain at or above 80%.
 - `npm run build` runs the TypeScript build and creates the Vite production bundle.
-- `npm run validate` runs the full application validation sequence in this order: formatting, linting, tests, then build.
+- `npm run validate` runs the full application validation sequence in this order: formatting, linting, tests, then build. Coverage remains separate so the normal completion check and local test loop do not pay the coverage cost.
 - `npm run audit` checks npm dependencies and fails when npm reports a high or critical vulnerability.
 - `npm run knip` checks for unused files, dependencies, and exports.
 - `npm run glossary:update` fetches the official Japanese WordPress.org Glossary and regenerates the committed static data. It is a maintenance command, not a validation check.
 - The build writes generated output under `dist/`; do not commit it.
+- Coverage HTML output is generated under `coverage/`; do not commit it.
 
-Use `npm run validate` as the repository-wide application completion check when all application validation steps apply. PR Validation runs this check, `npm run audit`, and Knip when started manually with GitHub Actions. Knip is enabled by default and can be disabled with the `run_knip` workflow input for manual runs. Keep `npm test` scoped to Vitest so automated tests can be run independently from formatting, linting, and build validation.
+Use `npm run validate` as the repository-wide application completion check when all application validation steps apply. PR Validation runs automatically for pull requests and runs `npm run validate`, `npm run test:coverage`, `npm run audit`, and Knip. For manual `workflow_dispatch` runs, Knip is enabled by default and can still be disabled with the `run_knip` input. Keep `npm test` scoped to Vitest so automated tests can be run independently from formatting, linting, build validation, and coverage reporting.
 
 Check changed lines for whitespace errors with:
 
@@ -53,6 +56,8 @@ git diff --check origin/main...HEAD
 ```
 
 Vitest uses its Node environment by default. Add a DOM environment or React DOM test utilities only when a React integration responsibility requires them.
+
+Coverage includes product TypeScript and TSX under `src/`. Test files, declaration files, and the thin application bootstrap `src/main.tsx` are excluded because they do not own product behavior that benefits from coverage measurement. Do not expand coverage exclusions to satisfy the threshold.
 
 ## Security validation
 
@@ -76,8 +81,8 @@ They are long-running or interactive and should not be treated as handoff valida
 ## Which checks to run
 
 - Documentation-only changes: `git diff --check origin/main...HEAD`.
-- JavaScript, TypeScript, JSX, TSX, test, or configuration changes that affect application compilation: `npm run validate` and the repository check.
-- Dependency manifest or lock-file changes: run `npm run validate`, `npm run audit`, and `npm run knip` after `npm ci`, and keep `package.json` and `package-lock.json` aligned.
+- JavaScript, TypeScript, JSX, TSX, test, or configuration changes that affect application compilation: `npm run validate`, `npm run test:coverage`, and the repository check.
+- Dependency manifest or lock-file changes: run `npm run validate`, `npm run test:coverage`, `npm run audit`, and `npm run knip` after `npm ci`, and keep `package.json` and `package-lock.json` aligned.
 - GitHub Actions workflow changes: review the final workflow diff and run `git diff --check origin/main...HEAD`.
 - Mixed changes: combine the applicable groups.
 
