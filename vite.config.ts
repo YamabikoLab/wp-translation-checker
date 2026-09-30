@@ -35,13 +35,10 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
  * @param command Vite の実行モード。
  * @returns index.html へ CSP meta 要素を追加する Vite plugin。
  */
-const applyContentSecurityPolicy = (
-  command: 'serve' | 'build',
-): Plugin => ({
+const applyContentSecurityPolicy = (command: 'serve' | 'build'): Plugin => ({
   name: 'apply-content-security-policy',
   transformIndexHtml() {
-    const connectSrc =
-      command === 'serve' ? "'self' ws: wss:" : "'self'"
+    const connectSrc = command === 'serve' ? "'self' ws: wss:" : "'self'"
 
     return [
       {
