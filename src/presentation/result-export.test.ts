@@ -118,7 +118,14 @@ describe('CSV result export', () => {
    * - 危険な先頭文字の前へアポストロフィが付き、通常文字列は変更されない。
    */
   it('when CSV fields start with spreadsheet formula prefixes, should neutralize them without changing normal text', () => {
-    const cases = ['=SUM(1,1)', '+cmd', '-1+2', '@SUM(A1)', '\tformula', '\nformula']
+    const cases = [
+      '=SUM(1,1)',
+      '+cmd',
+      '-1+2',
+      '@SUM(A1)',
+      '\tformula',
+      '\nformula',
+    ]
 
     for (const value of cases) {
       const csv = serializeCsv([
