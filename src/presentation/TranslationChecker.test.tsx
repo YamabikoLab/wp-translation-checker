@@ -199,16 +199,6 @@ describe('TranslationChecker', () => {
   })
 
   /**
-   * 事前条件:
-   * - ブラウザーが選択ファイルを読み取れない。
-   *
-   * 操作:
-   * - ファイルを選択して確認する。
-   *
-   * 期待結果:
-   * - ファイル読み取り失敗の案内を表示する。
-   */
-  /**
    * 上限を超える PO ファイルでは File.text を呼ばずに確認不能として扱うことを確認する。
    *
    * 事前条件:
@@ -287,6 +277,16 @@ describe('TranslationChecker', () => {
     expect(container.querySelector('[onerror]')).toBeNull()
   })
 
+  /**
+   * 事前条件:
+   * - ブラウザーが選択ファイルを読み取れない。
+   *
+   * 操作:
+   * - ファイルを選択して確認する。
+   *
+   * 期待結果:
+   * - ファイル読み取り失敗の案内を表示する。
+   */
   it('when the selected file cannot be read, should show file-read feedback', async () => {
     render(<App />)
     const file = new File([], 'broken.po', {

@@ -245,16 +245,6 @@ describe('FindingCorrection', () => {
   })
 
   /**
-   * 修正をキャンセルしたとき、一時入力を破棄して元の翻訳からやり直せることを確認する。
-   *
-   * 操作:
-   * - 翻訳を変更してからキャンセルし、再び修正操作を開始する。
-   *
-   * 期待結果:
-   * - 編集状態を終了する。
-   * - 再度開いた入力欄には、一時入力ではなく元の翻訳が表示される。
-   */
-  /**
    * 上限を超える修正案では検証処理へ進まず、利用者へ理由を表示することを確認する。
    *
    * 操作:
@@ -312,6 +302,16 @@ describe('FindingCorrection', () => {
     expect(container.querySelector('[onerror]')).toBeNull()
   })
 
+  /**
+   * 修正をキャンセルしたとき、一時入力を破棄して元の翻訳からやり直せることを確認する。
+   *
+   * 操作:
+   * - 翻訳を変更してからキャンセルし、再び修正操作を開始する。
+   *
+   * 期待結果:
+   * - 編集状態を終了する。
+   * - 再度開いた入力欄には、一時入力ではなく元の翻訳が表示される。
+   */
   it('when editing is cancelled, should discard the draft and restore the original translation on the next edit', () => {
     render(<FindingCorrection finding={createFinding()} />)
 

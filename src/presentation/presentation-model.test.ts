@@ -221,18 +221,6 @@ describe('Presentation state', () => {
   })
 
   /**
-   * File の読み取り失敗を正常結果と区別できることを確認する。
-   *
-   * 事前条件:
-   * - 対象ファイルの確認が進行中である。
-   *
-   * 操作:
-   * - File の読み取り失敗を通知する。
-   *
-   * 期待結果:
-   * - file-read-failure の確認不能状態となる。
-   */
-  /**
    * 選択ファイルが許容サイズを超えた場合に確認不能状態へ遷移できることを確認する。
    *
    * 事前条件:
@@ -260,6 +248,18 @@ describe('Presentation state', () => {
     })
   })
 
+  /**
+   * File の読み取り失敗を正常結果と区別できることを確認する。
+   *
+   * 事前条件:
+   * - 対象ファイルの確認が進行中である。
+   *
+   * 操作:
+   * - File の読み取り失敗を通知する。
+   *
+   * 期待結果:
+   * - file-read-failure の確認不能状態となる。
+   */
   it('when file reading fails for the active check, should enter feedback state', () => {
     const file = createFile('broken.po')
     const checking: PresentationState = { status: 'checking', file }

@@ -106,16 +106,6 @@ describe('CSV result export', () => {
   })
 
   /**
-   * 事前条件:
-   * - 正常完了した結果に指摘がない。
-   *
-   * 操作:
-   * - CSV へ変換する。
-   *
-   * 期待結果:
-   * - UTF-8 BOM とヘッダーだけを出力する。
-   */
-  /**
    * CSV セル先頭の数式評価につながる文字を文字列として無害化することを確認する。
    *
    * 事前条件:
@@ -151,6 +141,16 @@ describe('CSV result export', () => {
     ).toContain('Normal source,通常の翻訳')
   })
 
+  /**
+   * 事前条件:
+   * - 正常完了した結果に指摘がない。
+   *
+   * 操作:
+   * - CSV へ変換する。
+   *
+   * 期待結果:
+   * - UTF-8 BOM とヘッダーだけを出力する。
+   */
   it('when successful result has no findings, should export only the CSV header', () => {
     expect(serializeCsv([])).toBe(
       '\uFEFFtype,severity,styleGuideItem,message,source,translation,entryIndex,translationFormIndex,originalTerm,glossaryTranslations,partsOfSpeech,comments',
