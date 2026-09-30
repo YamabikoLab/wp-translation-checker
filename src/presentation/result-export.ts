@@ -9,6 +9,9 @@ import type { Finding } from './presentation-model'
 
 const CSV_BOM = '\uFEFF'
 
+/** 表計算ソフトで数式や特殊入力として解釈され得る CSV セル先頭文字。 */
+const CSV_FORMULA_PREFIX = /^[=+\-@\t\r\n]/u
+
 /**
  * 翻訳内の一致範囲を、重複や隣接による文字列の欠落・重複が起きない順序へ正規化する。
  *
@@ -124,15 +127,20 @@ const CSV_HEADERS = [
 /**
  * CSV の1フィールドとして安全に扱える文字列へ変換する。
  *
+ * 表計算ソフトで数式や特殊入力として評価され得る先頭文字にはアポストロフィを付け、
+ * その後で CSV 構文上の引用符・改行エスケープを適用する。
+ *
  * @param value CSV へ出力する値。
- * @returns カンマ、引用符、改行を含む場合に引用符で囲み、内部の引用符を二重化した値。
+ * @returns 表計算ソフトで文字列として扱える形にし、CSV 構文上もエスケープした値。
  */
 function escapeCsvField(value: string): string {
-  if (!/[",\r\n]/.test(value)) {
-    return value
+  const safeValue = CSV_FORMULA_PREFIX.test(value) ? `'${value}` : value
+
+  if (!/[",\r\n]/.test(safeValue)) {
+    return safeValue
   }
 
-  return `"${value.replaceAll('"', '""')}"`
+  return `"${safeValue.replaceAll('"', '""')}"`
 }
 
 /**

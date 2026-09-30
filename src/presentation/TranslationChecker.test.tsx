@@ -208,6 +208,85 @@ describe('TranslationChecker', () => {
    * 期待結果:
    * - ファイル読み取り失敗の案内を表示する。
    */
+  /**
+   * 上限を超える PO ファイルでは File.text を呼ばずに確認不能として扱うことを確認する。
+   *
+   * 事前条件:
+   * - 選択ファイルのサイズが 20 MiB を超えている。
+   *
+   * 操作:
+   * - ファイルを選択して確認する。
+   *
+   * 期待結果:
+   * - サイズ超過の案内を表示する。
+   * - File.text を呼び出さない。
+   */
+  it('when the selected PO exceeds the size limit, should reject it before reading the file', async () => {
+    render(<App />)
+    const file = createPoFile('should not be read', 'large.po')
+    let wasRead = false
+
+    Object.defineProperty(file, 'size', {
+      configurable: true,
+      value: 20 * 1024 * 1024 + 1,
+    })
+    Object.defineProperty(file, 'text', {
+      configurable: true,
+      value: async () => {
+        wasRead = true
+        return 'should not be read'
+      },
+    })
+
+    selectAndCheck(file)
+
+    expect(
+      await screen.findByRole('heading', {
+        name: 'ファイルが大きすぎます',
+      }),
+    ).toBeTruthy()
+    expect(wasRead).toBe(false)
+  })
+
+  /**
+   * PO ファイル内の攻撃文字列が HTML として解釈されないことを確認する。
+   *
+   * 事前条件:
+   * - 翻訳に img のイベント属性を含む文字列がある。
+   *
+   * 操作:
+   * - PO ファイルを確認する。
+   *
+   * 期待結果:
+   * - 攻撃文字列は表示文字列として保持され、img 要素や実行可能な属性を生成しない。
+   */
+  it('when a PO translation contains an XSS payload, should render it as text instead of HTML', async () => {
+    const { container } = render(<App />)
+    const payload = '<img src=x onerror=alert(1)>WordPressのテーブル'
+
+    selectAndCheck(
+      createPoFile(
+        [
+          'msgid ""',
+          'msgstr ""',
+          '"Language: ja\\n"',
+          '',
+          'msgid "WordPress Table"',
+          `msgstr "${payload}"`,
+          '',
+        ].join('\n'),
+      ),
+    )
+
+    await screen.findByRole('heading', {
+      name: '確認が正常に完了しました',
+    })
+
+    expect(container.textContent).toContain(payload)
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('[onerror]')).toBeNull()
+  })
+
   it('when the selected file cannot be read, should show file-read feedback', async () => {
     render(<App />)
     const file = new File([], 'broken.po', {

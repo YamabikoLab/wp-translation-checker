@@ -32,6 +32,9 @@ import styles from './TranslationChecker.module.css'
 
 const STYLE_GUIDE_LAST_UPDATED = '2026年8月28日'
 
+/** ブラウザー内で読み込み・解析を開始する PO ファイルの最大サイズ。 */
+const MAX_PO_FILE_SIZE_BYTES = 20 * 1024 * 1024
+
 /** Markdown コピー操作の結果として利用者へ通知する状態。 */
 type CopyFeedback = 'success' | 'failure' | null
 
@@ -98,6 +101,16 @@ export function TranslationChecker() {
     }
 
     const file = state.file
+
+    // 過大なファイルはブラウザーへ全体を読み込む前に拒否し、メモリ消費と同期処理負荷を抑える。
+    if (file.size > MAX_PO_FILE_SIZE_BYTES) {
+      activeFileRef.current = null
+      setCopyFeedback(null)
+      setSelectedRule(null)
+      setPage(1)
+      dispatch({ type: 'file-too-large', file })
+      return
+    }
 
     // 同一 File の確認がすでに進行中なら、重複した非同期処理を開始しない。
     if (activeFileRef.current === file) {

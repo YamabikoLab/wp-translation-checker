@@ -115,6 +115,42 @@ describe('CSV result export', () => {
    * 期待結果:
    * - UTF-8 BOM とヘッダーだけを出力する。
    */
+  /**
+   * CSV セル先頭の数式評価につながる文字を文字列として無害化することを確認する。
+   *
+   * 事前条件:
+   * - 原文・翻訳などの CSV 出力値が = / + / - / @ / タブ / 改行で始まる。
+   *
+   * 操作:
+   * - CSV へ変換する。
+   *
+   * 期待結果:
+   * - 危険な先頭文字の前へアポストロフィが付き、通常文字列は変更されない。
+   */
+  it('when CSV fields start with spreadsheet formula prefixes, should neutralize them without changing normal text', () => {
+    const cases = ['=SUM(1,1)', '+cmd', '-1+2', '@SUM(A1)', '\tformula', '\nformula']
+
+    for (const value of cases) {
+      const csv = serializeCsv([
+        createFinding({
+          source: value,
+          translation: value,
+        }),
+      ])
+
+      expect(csv).toContain(`'${value}`)
+    }
+
+    expect(
+      serializeCsv([
+        createFinding({
+          source: 'Normal source',
+          translation: '通常の翻訳',
+        }),
+      ]),
+    ).toContain('Normal source,通常の翻訳')
+  })
+
   it('when successful result has no findings, should export only the CSV header', () => {
     expect(serializeCsv([])).toBe(
       '\uFEFFtype,severity,styleGuideItem,message,source,translation,entryIndex,translationFormIndex,originalTerm,glossaryTranslations,partsOfSpeech,comments',

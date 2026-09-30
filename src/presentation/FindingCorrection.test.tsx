@@ -254,6 +254,64 @@ describe('FindingCorrection', () => {
    * - 編集状態を終了する。
    * - 再度開いた入力欄には、一時入力ではなく元の翻訳が表示される。
    */
+  /**
+   * 上限を超える修正案では検証処理へ進まず、利用者へ理由を表示することを確認する。
+   *
+   * 操作:
+   * - 100,001文字の修正案を入力して再チェックする。
+   *
+   * 期待結果:
+   * - 入力上限の案内を表示し、通常の再チェック結果を表示しない。
+   */
+  it('when a correction draft exceeds the character limit, should reject it before validation', () => {
+    render(<FindingCorrection finding={createFinding()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: '修正して再チェック' }))
+    fireEvent.change(screen.getByRole('textbox', { name: '翻訳' }), {
+      target: { value: 'あ'.repeat(100_001) },
+    })
+    fireEvent.click(screen.getByRole('button', { name: '再チェック' }))
+
+    expect(
+      screen.getByText(/修正案が長すぎるため再チェックできません/),
+    ).toBeTruthy()
+    expect(
+      screen.queryByText('この翻訳では問題は見つかりませんでした。'),
+    ).toBeNull()
+    expect(screen.queryByText('再チェック結果')).toBeNull()
+  })
+
+  /**
+   * 修正案の攻撃文字列を React の通常描画で文字列として扱うことを確認する。
+   *
+   * 操作:
+   * - script / img / javascript URL を含む文字列を修正案へ入力する。
+   *
+   * 期待結果:
+   * - textarea の値として内容を保持し、攻撃用 DOM 要素や属性を生成しない。
+   */
+  it('when a correction draft contains XSS payloads, should keep them as text instead of executable DOM', () => {
+    const { container } = render(
+      <FindingCorrection finding={createFinding()} />,
+    )
+    const payload =
+      '<script>alert(1)</script><img src=x onerror=alert(1)><a href="javascript:alert(1)">test</a>'
+
+    fireEvent.click(screen.getByRole('button', { name: '修正して再チェック' }))
+    fireEvent.change(screen.getByRole('textbox', { name: '翻訳' }), {
+      target: { value: payload },
+    })
+
+    expect(
+      (screen.getByRole('textbox', { name: '翻訳' }) as HTMLTextAreaElement)
+        .value,
+    ).toBe(payload)
+    expect(container.querySelector('script')).toBeNull()
+    expect(container.querySelector('img')).toBeNull()
+    expect(container.querySelector('a[href^="javascript:"]')).toBeNull()
+    expect(container.querySelector('[onerror]')).toBeNull()
+  })
+
   it('when editing is cancelled, should discard the draft and restore the original translation on the next edit', () => {
     render(<FindingCorrection finding={createFinding()} />)
 
