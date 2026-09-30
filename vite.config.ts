@@ -40,8 +40,7 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8')) as {
 const applyContentSecurityPolicy = (command: 'serve' | 'build'): Plugin => ({
   name: 'apply-content-security-policy',
   transformIndexHtml() {
-    const scriptSrc =
-      command === 'serve' ? "'self' 'unsafe-inline'" : "'self'"
+    const scriptSrc = command === 'serve' ? "'self' 'unsafe-inline'" : "'self'"
     const connectSrc = command === 'serve' ? "'self' ws: wss:" : "'self'"
 
     return [
