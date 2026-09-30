@@ -19,6 +19,17 @@ export function Feedback({
   state: Extract<PresentationState, { status: 'feedback' }>
 }) {
   switch (state.reason) {
+    case 'file-too-large':
+      return (
+        <>
+          <h2>ファイルが大きすぎます</h2>
+          <p>
+            20 MiB 以下の .po
+            ファイルを選択してください。大きなファイルは読み込みを開始しません。
+          </p>
+        </>
+      )
+
     case 'file-read-failure':
       return (
         <>

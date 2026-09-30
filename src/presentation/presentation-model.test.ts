@@ -221,6 +221,34 @@ describe('Presentation state', () => {
   })
 
   /**
+   * 選択ファイルが許容サイズを超えた場合に確認不能状態へ遷移できることを確認する。
+   *
+   * 事前条件:
+   * - .po ファイルが選択されている。
+   *
+   * 操作:
+   * - ファイルサイズ超過を通知する。
+   *
+   * 期待結果:
+   * - file-too-large の確認不能状態となる。
+   */
+  it('when the selected file exceeds the size limit, should enter file-too-large feedback state', () => {
+    const file = createFile('large.po')
+    const selected: PresentationState = { status: 'selected', file }
+
+    expect(
+      presentationReducer(selected, {
+        type: 'file-too-large',
+        file,
+      }),
+    ).toEqual({
+      status: 'feedback',
+      file,
+      reason: 'file-too-large',
+    })
+  })
+
+  /**
    * File の読み取り失敗を正常結果と区別できることを確認する。
    *
    * 事前条件:

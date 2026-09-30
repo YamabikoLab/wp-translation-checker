@@ -15,10 +15,14 @@ import styles from './TranslationChecker.module.css'
 const STYLE_GUIDE_URL =
   'https://ja.wordpress.org/team/handbook/translation/translation-style-guide/'
 
+/** 修正案の再チェックで検証処理へ渡す最大文字数。 */
+const MAX_CORRECTION_LENGTH = 100_000
+
 /** 1件の修正案について、利用者から見た編集・再チェック状態を表す。 */
 type CorrectionState =
   | { status: 'viewing' }
   | { status: 'editing'; draftTranslation: string }
+  | { status: 'too-large'; draftTranslation: string }
   | {
       status: 'checked'
       draftTranslation: string
@@ -64,6 +68,15 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
    * 元の確認結果は更新せず、このカード内で確認するための結果だけを保持する。
    */
   const handleRecheck = () => {
+    // 過大な修正案は Validation Core へ渡さず、このカード内で利用者へ入力制限を知らせる。
+    if (state.draftTranslation.length > MAX_CORRECTION_LENGTH) {
+      setState({
+        status: 'too-large',
+        draftTranslation: state.draftTranslation,
+      })
+      return
+    }
+
     // 1件だけの一時再チェックでは配列位置と entryIndex の公開契約を合わせるため、検証用 entryIndex を0へ正規化する。
     const entry = {
       entryIndex: 0,
@@ -142,6 +155,12 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
       </div>
 
       <div className={styles.correctionResult} role="status">
+        {state.status === 'too-large' && (
+          <p>
+            修正案が長すぎるため再チェックできません。100,000
+            文字以下にしてください。
+          </p>
+        )}
         {state.status === 'checked' &&
           (messages.length === 0 ? (
             <p className={styles.correctionSuccess}>

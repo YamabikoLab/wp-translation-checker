@@ -14,7 +14,11 @@ type FeedbackState =
   | {
       status: 'feedback'
       file: File
-      reason: 'file-read-failure' | 'invalid-po' | 'unresolved-locale'
+      reason:
+        | 'file-too-large'
+        | 'file-read-failure'
+        | 'invalid-po'
+        | 'unresolved-locale'
     }
   | {
       status: 'feedback'
@@ -43,6 +47,7 @@ export type PresentationState =
 export type PresentationAction =
   | { type: 'select-file'; file: File }
   | { type: 'start-check' }
+  | { type: 'file-too-large'; file: File }
   | { type: 'file-read-failure'; file: File }
   | { type: 'check-completed'; file: File; result: CheckResult }
 
@@ -149,6 +154,18 @@ export function presentationReducer(
     }
 
     return { status: 'checking', file: state.file }
+  }
+
+  if (action.type === 'file-too-large') {
+    if (state.status === 'no-file' || state.file !== action.file) {
+      return state
+    }
+
+    return {
+      status: 'feedback',
+      file: action.file,
+      reason: 'file-too-large',
+    }
   }
 
   if (state.status !== 'checking' || state.file !== action.file) {
