@@ -54,7 +54,7 @@ const applyContentSecurityPolicy = (
       },
     ]
   },
-}))
+})
 
 const serveGettextBrowserBundle = (): Plugin => ({
   name: 'serve-gettext-converter-browser-bundle',
