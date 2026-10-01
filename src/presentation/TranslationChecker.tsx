@@ -13,6 +13,7 @@ import {
   type ChangeEvent,
 } from 'react'
 import { checkPo } from '@/check/check'
+import { useUiTranslation } from '@/i18n/i18n'
 import {
   createFindings,
   createPaginationModel,
@@ -28,11 +29,10 @@ import { CheckScopeGuide } from './CheckScopeGuide'
 import { Feedback } from './Feedback'
 import { FindingCard } from './FindingCard'
 import { PaginationControls } from './PaginationControls'
+import { LanguageSwitcher } from './LanguageSwitcher'
 import { QuickCheck } from './QuickCheck'
 import { serializeCsv, serializeJson, serializeMarkdown } from './result-export'
 import styles from './TranslationChecker.module.css'
-
-const STYLE_GUIDE_LAST_UPDATED = '2026年8月28日'
 
 /** ブラウザー内で読み込み・解析を開始する PO ファイルの最大サイズ。 */
 const MAX_PO_FILE_SIZE_BYTES = 20 * 1024 * 1024
@@ -46,6 +46,7 @@ type CopyFeedback = 'success' | 'failure' | null
  * @returns 直接入力と PO ファイル確認の双方をブラウザー内で完結して利用できる翻訳確認画面。
  */
 export function TranslationChecker() {
+  const { t } = useUiTranslation()
   const [state, dispatch] = useReducer(presentationReducer, {
     status: 'no-file',
   })
@@ -260,31 +261,28 @@ export function TranslationChecker() {
   return (
     <main className={styles.page}>
       <header className={styles.intro}>
-        <p className={styles.eyebrow}>YamabikoLab</p>
-        <h1>WP 翻訳チェッカー</h1>
+        <div className={styles.introTop}>
+          <p className={styles.eyebrow}>YamabikoLab</p>
+          <LanguageSwitcher />
+        </div>
+        <h1>{t('app.title')}</h1>
         <p className={styles.version}>v{__APP_VERSION__}</p>
-        <p className={styles.lead}>
-          WordPress 日本語翻訳スタイルガイド（{STYLE_GUIDE_LAST_UPDATED}
-          最終更新）の対象ルールと、日本語 Glossary
-          の登録訳語をブラウザー内で確認します。
-        </p>
-        <p className={styles.privacy}>
-          入力・選択した翻訳内容は外部の確認サービスへ送信しません。
-        </p>
+        <p className={styles.lead}>{t('app.lead')}</p>
+        <p className={styles.privacy}>{t('app.privacy')}</p>
       </header>
 
       <QuickCheck />
 
       <section className={styles.inputCard} aria-labelledby="file-input-title">
         <div>
-          <h2 id="file-input-title">PO ファイルを選択</h2>
+          <h2 id="file-input-title">{t('app.fileTitle')}</h2>
           <p className={styles.secondaryText}>
-            ファイルを選択しただけでは確認を開始しません。
+            {t('app.fileHint')}
           </p>
         </div>
 
         <label className={styles.fileInput}>
-          <span>.po ファイル</span>
+          <span>{t('app.fileLabel')}</span>
           <input
             type="file"
             accept=".po,text/x-gettext-translation"
@@ -295,7 +293,7 @@ export function TranslationChecker() {
         {/* 実ファイルが選択済みの場合だけ、現在の確認対象を利用者へ示す。 */}
         {selectedFile !== null && (
           <p className={styles.selectedFile}>
-            選択中: <strong>{selectedFile.name}</strong>
+            {t('app.selectedFile', { fileName: selectedFile.name })}
           </p>
         )}
 
@@ -307,13 +305,13 @@ export function TranslationChecker() {
           onClick={handleCheck}
         >
           {/* 進行中は操作名ではなく現在状態を示し、重複操作を促さない。 */}
-          {state.status === 'checking' ? '確認中…' : '確認する'}
+          {state.status === 'checking' ? t('app.checking') : t('app.check')}
         </button>
 
         {/* 確認処理の進行中だけ状態通知を表示する。 */}
         {state.status === 'checking' && (
           <p className={styles.checking} role="status">
-            {state.file.name} を確認しています。
+            {t('app.checkingFile', { fileName: state.file.name })}
           </p>
         )}
       </section>
@@ -340,26 +338,26 @@ export function TranslationChecker() {
             aria-labelledby="result-summary-title"
           >
             <div>
-              <p className={styles.eyebrow}>確認完了</p>
-              <h2 id="result-summary-title">確認が正常に完了しました</h2>
+              <p className={styles.eyebrow}>{t('app.completedEyebrow')}</p>
+              <h2 id="result-summary-title">{t('app.completedTitle')}</h2>
             </div>
 
             <dl className={styles.counts}>
               <div className={styles.errorCount}>
                 <dt>Error</dt>
-                <dd>{summary.errorCount}件</dd>
+                <dd>{t('app.errorCount', { count: summary.errorCount })}</dd>
               </div>
               <div className={styles.warningCount}>
                 <dt>Warning</dt>
-                <dd>{summary.warningCount}件</dd>
+                <dd>{t('app.warningCount', { count: summary.warningCount })}</dd>
               </div>
             </dl>
 
             {/* Style Guide と Glossary の双方で指摘がない場合だけ、指摘なしの案内を表示する。 */}
             {summary.totalCount === 0 && (
               <div className={styles.noFindings}>
-                <p>WTC の自動チェックでは問題が見つかりませんでした。</p>
-                <p>手動で確認したい項目もあります。</p>
+                <p>{t('app.noFindings')}</p>
+                <p>{t('app.manualAlso')}</p>
               </div>
             )}
 
@@ -367,11 +365,8 @@ export function TranslationChecker() {
 
             <div className={styles.exportArea}>
               <div>
-                <h3>確認結果を共有・保存</h3>
-                <p>
-                  CSV / JSON はファイルとして保存し、Markdown
-                  はクリップボードへコピーします。
-                </p>
+                <h3>{t('app.exportTitle')}</h3>
+                <p>{t('app.exportHint')}</p>
               </div>
               <div className={styles.exportActions}>
                 <button
@@ -379,34 +374,33 @@ export function TranslationChecker() {
                   className={styles.exportButton}
                   onClick={handleCsvDownload}
                 >
-                  CSV をダウンロード
+                  {t('app.csvDownload')}
                 </button>
                 <button
                   type="button"
                   className={styles.exportButton}
                   onClick={handleJsonDownload}
                 >
-                  JSON をダウンロード
+                  {t('app.jsonDownload')}
                 </button>
                 <button
                   type="button"
                   className={styles.exportButton}
                   onClick={handleMarkdownCopy}
                 >
-                  Markdown をコピー
+                  {t('app.markdownCopy')}
                 </button>
               </div>
               {/* コピー成功時だけ完了通知を表示する。 */}
               {copyFeedback === 'success' && (
                 <p className={styles.copySuccess} role="status">
-                  Markdown をクリップボードへコピーしました。
+                  {t('app.markdownCopied')}
                 </p>
               )}
               {/* コピー失敗時だけ、利用者が対処できるエラー通知を表示する。 */}
               {copyFeedback === 'failure' && (
                 <p className={styles.copyFailure} role="alert">
-                  Markdown
-                  をコピーできませんでした。ブラウザーのクリップボード利用設定を確認してください。
+                  {t('app.markdownCopyFailed')}
                 </p>
               )}
             </div>
@@ -420,12 +414,12 @@ export function TranslationChecker() {
               aria-labelledby="findings-title"
             >
               <div className={styles.findingsHeading}>
-                <h2 id="findings-title">指摘一覧</h2>
-                <p>{filteredFindings.length}件の指摘</p>
+                <h2 id="findings-title">{t('app.findingsTitle')}</h2>
+                <p>{t('app.findingsCount', { count: filteredFindings.length })}</p>
               </div>
 
               <label className={styles.ruleFilter}>
-                <span>項目で絞り込む</span>
+                <span>{t('app.filterLabel')}</span>
                 <select
                   value={selectedRule ?? ''}
                   onChange={(event) => {
@@ -434,7 +428,7 @@ export function TranslationChecker() {
                     setPage(1)
                   }}
                 >
-                  <option value="">すべての項目</option>
+                  <option value="">{t('app.allItems')}</option>
                   {ruleFilterOptions.map((option) => (
                     <option
                       key={option.styleGuideItem}
