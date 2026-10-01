@@ -79,6 +79,28 @@ function selectAndCheck(file: File) {
 
 describe('TranslationChecker', () => {
   /**
+   * トップ画面でクイックチェックが PO ファイル入力より先に案内されることを確認する。
+   *
+   * 期待結果:
+   * - 「1文をすぐ確認」が「PO ファイルを選択」より前に表示される。
+   */
+  it('when the screen is rendered, should place quick check before the PO file input', () => {
+    render(<App />)
+
+    const quickCheckHeading = screen.getByRole('heading', {
+      name: '1文をすぐ確認',
+    })
+    const fileInputHeading = screen.getByRole('heading', {
+      name: 'PO ファイルを選択',
+    })
+
+    expect(
+      quickCheckHeading.compareDocumentPosition(fileInputHeading) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+
+  /**
    * 事前条件:
    * - 日本語ロケールで指摘のない正常な PO がある。
    *
