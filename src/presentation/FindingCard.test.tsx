@@ -15,7 +15,7 @@ import {
   screen,
   within,
 } from '@testing-library/react'
-import i18n from '@/i18n/i18n'
+import i18n from '../i18n/i18n'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Finding } from './presentation-model'
 import { FindingCard } from './FindingCard'
