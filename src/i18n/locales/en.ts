@@ -22,6 +22,8 @@ export const en = {
     fileTitle: 'Select a PO file',
     fileHint: 'Selecting a file does not start the check.',
     fileLabel: '.po file',
+    chooseFile: 'Choose file',
+    noFileSelected: 'No file selected',
     selectedFile: 'Selected: {{fileName}}',
     checking: 'Checking…',
     check: 'Check',
