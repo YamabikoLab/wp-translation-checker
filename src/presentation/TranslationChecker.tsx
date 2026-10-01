@@ -415,7 +415,9 @@ export function TranslationChecker() {
             >
               <div className={styles.findingsHeading}>
                 <h2 id="findings-title">{t('app.findingsTitle')}</h2>
-                <p>{t('app.findingsCount', { count: filteredFindings.length })}</p>
+                <p>
+                  {t('app.findingsCount', { count: filteredFindings.length })}
+                </p>
               </div>
 
               <label className={styles.ruleFilter}>
