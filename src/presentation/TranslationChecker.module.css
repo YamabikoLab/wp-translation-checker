@@ -166,17 +166,54 @@
   font-weight: 700;
 }
 
-.fileInput input {
-  width: 100%;
-  box-sizing: border-box;
+.filePicker {
+  display: flex;
+  align-items: center;
+  gap: 10px 14px;
+  min-width: 0;
   padding: 12px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-medium);
   background: var(--color-background);
-  color: var(--color-text);
 }
 
-.selectedFile,
+.filePickerButton {
+  position: relative;
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 7px 11px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: var(--color-surface);
+  color: var(--color-heading);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.filePickerButton:hover {
+  border-color: var(--color-accent);
+}
+
+.filePickerInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.selectedFile {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+}
+
 .checking {
   margin: 0;
 }
@@ -208,7 +245,7 @@
 .exportButton:focus-visible,
 .findingCopyButton:focus-visible,
 .textToggle:focus-visible,
-.fileInput input:focus-visible,
+.filePickerButton:focus-within,
 .quickCheckField textarea:focus-visible,
 .ruleFilter select:focus-visible,
 .guideReference a:focus-visible {
@@ -878,6 +915,11 @@
   }
 
   .introTop {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .filePicker {
     align-items: flex-start;
     flex-direction: column;
   }
