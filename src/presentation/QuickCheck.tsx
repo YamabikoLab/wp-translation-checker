@@ -8,7 +8,7 @@
 
 import { useState } from 'react'
 import { checkEntry } from '@/check/check'
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import {
   createFindings,
   summarizeFindings,
