@@ -194,7 +194,10 @@ describe('QuickCheck', () => {
 
     checkTranslation('WordPress Table', payload)
 
-    expect(screen.getByText(/確認完了。Error 1件、Warning 0件/)).toBeTruthy()
+    expect(screen.getByRole('status').textContent).toContain('確認完了。')
+    expect(
+      screen.getByText('スタイルガイド: 1-4 半角文字と全角文字の間のスペース'),
+    ).toBeTruthy()
     expect(container.textContent).toContain(payload)
     expect(container.querySelector('script')).toBeNull()
     expect(container.querySelector('img')).toBeNull()
