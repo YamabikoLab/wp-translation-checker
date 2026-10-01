@@ -86,7 +86,13 @@ export function FindingCard({
         >
           {finding.severity}
         </span>
-        <p className={styles.findingMessage}>{finding.kind === 'glossary' ? t('finding.glossaryMessage', { term: finding.glossary.originalTerm }) : finding.message}</p>
+        <p className={styles.findingMessage}>
+          {finding.kind === 'glossary'
+            ? t('finding.glossaryMessage', {
+                term: finding.glossary.originalTerm,
+              })
+            : finding.message}
+        </p>
       </div>
 
       <div className={styles.comparison}>
