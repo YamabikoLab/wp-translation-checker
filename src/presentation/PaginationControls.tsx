@@ -5,6 +5,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
+import { useUiTranslation } from '@/i18n/i18n'
 import { PAGE_SIZE_OPTIONS } from './presentation-model'
 import styles from './TranslationChecker.module.css'
 
@@ -44,6 +45,7 @@ export function PaginationControls({
   onPageChange: (page: number) => void
   onPageSizeChange: (pageSize: number) => void
 }) {
+  const { t } = useUiTranslation()
   const [pageDraft, setPageDraft] = useState(String(currentPage))
   const editingRef = useRef(false)
 
@@ -75,19 +77,19 @@ export function PaginationControls({
   return (
     <div className={styles.paginationArea}>
       <p className={styles.paginationRange}>
-        {rangeStart}–{rangeEnd} / {totalCount}件の指摘
+        {t('pagination.range', { start: rangeStart, end: rangeEnd, total: totalCount })}
       </p>
 
       <div className={styles.paginationControls}>
         <label className={styles.pageSizeControl}>
-          <span>表示件数</span>
+          <span>{t('pagination.pageSize')}</span>
           <select
             value={pageSize}
             onChange={(event) => onPageSizeChange(Number(event.target.value))}
           >
             {PAGE_SIZE_OPTIONS.map((option) => (
               <option key={option} value={option}>
-                {option}件
+                {t('pagination.itemCount', { count: option })}
               </option>
             ))}
           </select>
@@ -98,11 +100,11 @@ export function PaginationControls({
           <>
             <nav
               className={styles.pageNavigation}
-              aria-label="指摘一覧のページ移動"
+              aria-label={t('pagination.navigation')}
             >
               <button
                 type="button"
-                aria-label="前のページ"
+                aria-label={t('pagination.previous')}
                 disabled={currentPage === 1}
                 onClick={() => onPageChange(currentPage - 1)}
               >
@@ -130,7 +132,7 @@ export function PaginationControls({
               )}
               <button
                 type="button"
-                aria-label="次のページ"
+                aria-label={t('pagination.next')}
                 disabled={currentPage === totalPages}
                 onClick={() => onPageChange(currentPage + 1)}
               >
@@ -139,12 +141,12 @@ export function PaginationControls({
             </nav>
 
             <label className={styles.directPageControl}>
-              <span>ページ</span>
+              <span>{t('pagination.page')}</span>
               <input
                 type="text"
                 inputMode="numeric"
                 value={pageDraft}
-                aria-label="移動先ページ"
+                aria-label={t('pagination.destination')}
                 onFocus={() => {
                   editingRef.current = true
                 }}
@@ -159,7 +161,7 @@ export function PaginationControls({
                 }}
                 onBlur={commitPageDraft}
               />
-              <span>/ {totalPages}</span>
+              <span>{t('pagination.totalPages', { total: totalPages })}</span>
             </label>
           </>
         )}
