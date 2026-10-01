@@ -5,7 +5,7 @@
  */
 
 import { useState } from 'react'
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import { getCollapsedText, type Finding } from './presentation-model'
 import styles from './TranslationChecker.module.css'
 
