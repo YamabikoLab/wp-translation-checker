@@ -4,7 +4,7 @@
  * 画面状態の判定結果だけを受け取り、確認処理や状態遷移は扱わない。
  */
 
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import type { PresentationState } from './presentation-model'
 
 /**
