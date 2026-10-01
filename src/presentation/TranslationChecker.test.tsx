@@ -35,9 +35,9 @@ beforeAll(() => {
   ).gettext = { po2js }
 })
 
-beforeEach(() => {
+beforeEach(async () => {
   window.localStorage.clear()
-  void i18n.changeLanguage('ja')
+  await i18n.changeLanguage('ja')
 })
 
 afterEach(() => {
