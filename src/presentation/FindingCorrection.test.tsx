@@ -407,6 +407,19 @@ describe('FindingCorrection', () => {
     ).toBeTruthy()
   })
 
+  /**
+   * English UI の再チェックでも、残った Glossary Warning の UI 文言を英語表示することを確認する。
+   *
+   * 事前条件:
+   * - Glossary Warning を持つ翻訳がある。
+   * - UI 言語は English である。
+   *
+   * 操作:
+   * - 修正案を開き、内容を変えずに再チェックする。
+   *
+   * 期待結果:
+   * - 再チェック結果の Glossary 指摘メッセージは英語で表示される。
+   */
   it('when a glossary warning remains in English, should translate the recheck message for the English UI', async () => {
     await i18n.changeLanguage('en')
     render(<FindingCorrection finding={createGlossaryFinding()} />)
