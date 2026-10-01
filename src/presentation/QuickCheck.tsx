@@ -6,7 +6,11 @@
 
 import { useState } from 'react'
 import { checkEntry } from '@/check/check'
-import { createFindings, summarizeFindings, type Finding } from './presentation-model'
+import {
+  createFindings,
+  summarizeFindings,
+  type Finding,
+} from './presentation-model'
 import { FindingCard } from './FindingCard'
 import styles from './TranslationChecker.module.css'
 
