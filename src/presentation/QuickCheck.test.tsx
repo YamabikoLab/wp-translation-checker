@@ -11,9 +11,9 @@ import i18n from '@/i18n/i18n'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { QuickCheck } from './QuickCheck'
 
-beforeEach(() => {
+beforeEach(async () => {
   window.localStorage.clear()
-  void i18n.changeLanguage('ja')
+  await i18n.changeLanguage('ja')
 })
 
 afterEach(() => {
