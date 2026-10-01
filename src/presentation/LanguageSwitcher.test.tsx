@@ -6,7 +6,13 @@
  * UI 言語切り替えについて、表示更新、保存、文書言語とページタイトルの同期を利用者操作から確認する。
  */
 
-import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from '@testing-library/react'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import i18n from '@/i18n/i18n'
 import { LanguageSwitcher } from './LanguageSwitcher'
@@ -29,7 +35,9 @@ describe('LanguageSwitcher', () => {
     })
 
     await waitFor(() => {
-      expect(screen.getByRole('combobox', { name: 'Display language' })).toBeTruthy()
+      expect(
+        screen.getByRole('combobox', { name: 'Display language' }),
+      ).toBeTruthy()
     })
 
     expect(window.localStorage.getItem('wtc-ui-language')).toBe('en')
