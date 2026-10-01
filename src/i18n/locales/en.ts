@@ -4,6 +4,7 @@
  * 検証ルールや Glossary データではなく、画面表示にだけ利用する文言を所有する。
  */
 
+/** WTC の 英語 UI で利用する翻訳リソース。 */
 export const en = {
   meta: {
     title: 'WP Translation Checker',
