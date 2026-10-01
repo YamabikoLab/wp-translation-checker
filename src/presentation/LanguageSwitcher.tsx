@@ -2,7 +2,7 @@
  * WTC の UI 表示言語を利用者が日本語 / English から選択する操作を提供する。
  */
 
-import { setUiLanguage, useUiTranslation, type UiLanguage } from '@/i18n/i18n'
+import { setUiLanguage, useUiTranslation, type UiLanguage } from '../i18n/i18n'
 import styles from './TranslationChecker.module.css'
 
 /**
