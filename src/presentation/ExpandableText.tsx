@@ -5,6 +5,7 @@
  */
 
 import { useState } from 'react'
+import { useUiTranslation } from '@/i18n/i18n'
 import { getCollapsedText, type Finding } from './presentation-model'
 import styles from './TranslationChecker.module.css'
 
@@ -23,6 +24,7 @@ export function ExpandableText({
   text: string
   matches?: Finding['matches']
 }) {
+  const { t } = useUiTranslation()
   const [expanded, setExpanded] = useState(false)
   const { isLong, collapsed } = getCollapsedText(text)
   const displayedText = isLong && !expanded ? collapsed : text
@@ -82,7 +84,7 @@ export function ExpandableText({
         aria-expanded={expanded}
         onClick={() => setExpanded((current) => !current)}
       >
-        {expanded ? '折りたたむ' : '全文を表示'}
+        {expanded ? t('expandable.collapse') : t('expandable.expand')}
       </button>
     </div>
   )
