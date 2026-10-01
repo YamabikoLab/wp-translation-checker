@@ -163,11 +163,8 @@ describe('PaginationControls', () => {
     expect(
       screen.getByRole('navigation', { name: 'Findings pagination' }),
     ).toBeTruthy()
-    expect(
-      screen.getByRole('button', { name: 'Previous page' }),
-    ).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Previous page' })).toBeTruthy()
     expect(screen.getByRole('button', { name: 'Next page' })).toBeTruthy()
     expect(screen.getByRole('textbox', { name: 'Go to page' })).toBeTruthy()
   })
-
 })
