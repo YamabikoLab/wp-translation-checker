@@ -6,6 +6,7 @@
 
 import { useState } from 'react'
 import { checkEntry } from '@/check/check'
+import { useUiTranslation } from '@/i18n/i18n'
 import { ExpandableText } from './ExpandableText'
 import { createFindings, type Finding } from './presentation-model'
 import styles from './TranslationChecker.module.css'
@@ -35,6 +36,7 @@ type CorrectionState =
  * @returns 対象カード内で完結する修正案の確認 UI。
  */
 export function FindingCorrection({ finding }: { finding: Finding }) {
+  const { t } = useUiTranslation()
   const translationForm = finding.entry.translations.find(
     (form) => form.index === finding.translationFormIndex,
   )
@@ -54,7 +56,7 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
             setState({ status: 'editing', draftTranslation: translation })
           }}
         >
-          修正して再チェック
+          {t('correction.start')}
         </button>
       </div>
     )
@@ -103,16 +105,13 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
     >
       <div className={styles.correctionHeading}>
         <div>
-          <h3 id={`correction-title-${finding.key}`}>修正案を再チェック</h3>
-          <p>
-            ここでの修正は確認用です。元の PO
-            ファイルや全体の確認結果は変更しません。
-          </p>
+          <h3 id={`correction-title-${finding.key}`}>{t('correction.title')}</h3>
+          <p>{t('correction.hint')}</p>
         </div>
       </div>
 
       <label className={styles.correctionField}>
-        <span>翻訳</span>
+        <span>{t('correction.translation')}</span>
         <textarea
           value={state.draftTranslation}
           rows={4}
@@ -131,7 +130,7 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
           className={styles.correctionCheckButton}
           onClick={handleRecheck}
         >
-          再チェック
+          {t('correction.recheck')}
         </button>
         <button
           type="button"
@@ -140,25 +139,22 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
             setState({ status: 'viewing' })
           }}
         >
-          キャンセル
+          {t('correction.cancel')}
         </button>
       </div>
 
       <div className={styles.correctionResult} role="status">
         {state.status === 'too-large' && (
-          <p>
-            修正案が長すぎるため再チェックできません。100,000
-            文字以下にしてください。
-          </p>
+          <p>{t('correction.tooLarge')}</p>
         )}
         {state.status === 'checked' &&
           (messages.length === 0 ? (
             <p className={styles.correctionSuccess}>
-              この翻訳では問題は見つかりませんでした。
+              {t('correction.noFindings')}
             </p>
           ) : (
             <>
-              <h4>再チェック結果</h4>
+              <h4>{t('correction.result')}</h4>
               <div className={styles.correctionFindings}>
                 {/* 修正案で残っている各指摘を、通常結果と同じ判断材料を確認できる単位で表示する。 */}
                 {messages.map((message) => (
@@ -176,7 +172,7 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
                       >
                         {message.severity}
                       </span>
-                      <p>{message.message}</p>
+                      <p>{message.kind === 'glossary' ? t('finding.glossaryMessage', { term: message.glossary.originalTerm }) : message.message}</p>
                     </div>
                     <ExpandableText
                       text={state.draftTranslation}
@@ -184,18 +180,19 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
                     />
                     {message.kind === 'glossary' && (
                       <p className={styles.correctionGuide}>
-                        Glossary 候補:{' '}
-                        {message.glossary.candidates
-                          .map((candidate) => candidate.translation)
-                          .filter((translation) => translation !== '')
-                          .join(' / ')}
+                        {t('correction.glossaryCandidates', {
+                          candidates: message.glossary.candidates
+                            .map((candidate) => candidate.translation)
+                            .filter((translation) => translation !== '')
+                            .join(' / '),
+                        })}
                       </p>
                     )}
                     <p className={styles.correctionGuide}>
                       <span>
                         {message.kind === 'glossary'
-                          ? '確認項目: Glossary'
-                          : `スタイルガイド: ${message.styleGuideItem}`}
+                          ? t('finding.glossaryItem')
+                          : t('finding.styleGuideItem', { item: message.styleGuideItem })}
                       </span>
                       <a
                         href={
@@ -207,8 +204,8 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
                         rel="noreferrer"
                       >
                         {message.kind === 'glossary'
-                          ? 'WordPress.org 日本語 Glossary を確認'
-                          : 'WordPress 日本語翻訳スタイルガイドを確認'}
+                          ? t('finding.glossaryLink')
+                          : t('finding.styleGuideLink')}
                       </a>
                     </p>
                   </section>
