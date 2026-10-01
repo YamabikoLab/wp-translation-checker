@@ -334,6 +334,19 @@ describe('FindingCard Glossary presentation', () => {
     ).toBeTruthy()
   })
 
+  /**
+   * English UI では Presentation が生成する Glossary 指摘文を英語表示することを確認する。
+   *
+   * 事前条件:
+   * - Glossary Warning がある。
+   * - UI 言語は English である。
+   *
+   * 操作:
+   * - Glossary Finding を共通カードへ表示する。
+   *
+   * 期待結果:
+   * - Glossary 指摘メッセージは英語で表示され、日本語の UI 文言は残らない。
+   */
   it('when a glossary finding is shown in English, should translate the glossary message for the English UI', async () => {
     await i18n.changeLanguage('en')
 
