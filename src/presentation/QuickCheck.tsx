@@ -82,9 +82,7 @@ export function QuickCheck() {
     >
       <div>
         <h2 id="quick-check-title">{t('quick.title')}</h2>
-        <p className={styles.secondaryText}>
-          {t('quick.hint')}
-        </p>
+        <p className={styles.secondaryText}>{t('quick.hint')}</p>
       </div>
 
       <label className={styles.quickCheckField}>
@@ -124,12 +122,15 @@ export function QuickCheck() {
 
       <div className={styles.quickCheckStatus} role="status" aria-live="polite">
         {/* 入力上限超過時は通常結果ではなく、確認を実行できない理由を通知する。 */}
-        {result.status === 'too-large' && (
-          <p>{t('quick.tooLarge')}</p>
-        )}
+        {result.status === 'too-large' && <p>{t('quick.tooLarge')}</p>}
         {/* 確認済みの場合だけ、現在入力に対応する Error / Warning 件数を通知する。 */}
         {result.status === 'checked' && (
-          <p>{t('quick.completed', { errorCount: summary.errorCount, warningCount: summary.warningCount })}</p>
+          <p>
+            {t('quick.completed', {
+              errorCount: summary.errorCount,
+              warningCount: summary.warningCount,
+            })}
+          </p>
         )}
       </div>
 

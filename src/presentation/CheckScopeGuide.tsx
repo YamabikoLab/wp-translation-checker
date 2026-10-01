@@ -28,13 +28,13 @@ export function CheckScopeGuide() {
     >
       <div className={styles.scopeGuideHeader}>
         <h3 id="check-scope-guide-title">{t('scope.title')}</h3>
-        <span className={styles.scopeGuideSummaryNote}>{t('scope.summary')}</span>
+        <span className={styles.scopeGuideSummaryNote}>
+          {t('scope.summary')}
+        </span>
       </div>
 
       <div className={styles.scopeGuideContent}>
-        <p>
-          {t('scope.description')}
-        </p>
+        <p>{t('scope.description')}</p>
 
         <dl className={styles.scopeGuideLegend}>
           <div>
@@ -43,9 +43,7 @@ export function CheckScopeGuide() {
           </div>
           <div>
             <dt>{t('scope.partial')}</dt>
-            <dd>
-              {t('scope.partialBody')}
-            </dd>
+            <dd>{t('scope.partialBody')}</dd>
           </div>
           <div>
             <dt>{t('scope.manual')}</dt>

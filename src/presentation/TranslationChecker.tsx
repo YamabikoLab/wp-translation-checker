@@ -276,9 +276,7 @@ export function TranslationChecker() {
       <section className={styles.inputCard} aria-labelledby="file-input-title">
         <div>
           <h2 id="file-input-title">{t('app.fileTitle')}</h2>
-          <p className={styles.secondaryText}>
-            {t('app.fileHint')}
-          </p>
+          <p className={styles.secondaryText}>{t('app.fileHint')}</p>
         </div>
 
         <label className={styles.fileInput}>
@@ -349,7 +347,9 @@ export function TranslationChecker() {
               </div>
               <div className={styles.warningCount}>
                 <dt>Warning</dt>
-                <dd>{t('app.warningCount', { count: summary.warningCount })}</dd>
+                <dd>
+                  {t('app.warningCount', { count: summary.warningCount })}
+                </dd>
               </div>
             </dl>
 

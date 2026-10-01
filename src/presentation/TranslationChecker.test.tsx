@@ -119,9 +119,7 @@ describe('TranslationChecker', () => {
     expect(
       await screen.findByRole('heading', { name: 'WP Translation Checker' }),
     ).toBeTruthy()
-    expect(
-      screen.getByRole('heading', { name: 'Quick check' }),
-    ).toBeTruthy()
+    expect(screen.getByRole('heading', { name: 'Quick check' })).toBeTruthy()
     expect(
       screen.getByRole('heading', { name: 'Select a PO file' }),
     ).toBeTruthy()

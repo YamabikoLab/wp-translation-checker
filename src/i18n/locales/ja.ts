@@ -15,10 +15,8 @@ export const ja = {
   },
   app: {
     title: 'WP 翻訳チェッカー',
-    lead:
-      'WordPress 日本語翻訳スタイルガイド（2026年8月28日最終更新）の対象ルールと、日本語 Glossary の登録訳語をブラウザー内で確認します。',
-    privacy:
-      '入力・選択した翻訳内容は外部の確認サービスへ送信しません。',
+    lead: 'WordPress 日本語翻訳スタイルガイド（2026年8月28日最終更新）の対象ルールと、日本語 Glossary の登録訳語をブラウザー内で確認します。',
+    privacy: '入力・選択した翻訳内容は外部の確認サービスへ送信しません。',
     fileTitle: 'PO ファイルを選択',
     fileHint: 'ファイルを選択しただけでは確認を開始しません。',
     fileLabel: '.po ファイル',
@@ -96,8 +94,7 @@ export const ja = {
   correction: {
     start: '修正して再チェック',
     title: '修正案を再チェック',
-    hint:
-      'ここでの修正は確認用です。元の PO ファイルや全体の確認結果は変更しません。',
+    hint: 'ここでの修正は確認用です。元の PO ファイルや全体の確認結果は変更しません。',
     translation: '翻訳',
     recheck: '再チェック',
     cancel: 'キャンセル',
@@ -126,8 +123,7 @@ export const ja = {
     automatic: '✅ 自動チェック',
     automaticBody: '機械的に高い確度で判定できる項目。',
     partial: '△ 一部チェック',
-    partialBody:
-      '特定の原文パターンなど、判定できる条件に限って確認する項目。',
+    partialBody: '特定の原文パターンなど、判定できる条件に限って確認する項目。',
     manual: '👀 手動確認',
     manualBody: '文脈・意味・自然さなど、人による判断が必要な項目。',
     manualTitle: '手動で確認したい主な項目',

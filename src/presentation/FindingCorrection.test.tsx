@@ -434,5 +434,4 @@ describe('FindingCorrection', () => {
       screen.queryByText('「website」の Glossary 訳語を確認してください'),
     ).toBeNull()
   })
-
 })

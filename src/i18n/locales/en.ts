@@ -15,8 +15,7 @@ export const en = {
   },
   app: {
     title: 'WP Translation Checker',
-    lead:
-      'Checks supported rules from the WordPress Japanese Translation Style Guide (last updated August 28, 2026) and registered terms in the Japanese Glossary, entirely in your browser.',
+    lead: 'Checks supported rules from the WordPress Japanese Translation Style Guide (last updated August 28, 2026) and registered terms in the Japanese Glossary, entirely in your browser.',
     privacy:
       'The translation content you enter or select is not sent to an external checking service.',
     fileTitle: 'Select a PO file',
@@ -48,8 +47,7 @@ export const en = {
   },
   quick: {
     title: 'Quick check',
-    hint:
-      'Enter source and translated text to check one entry without a PO file.',
+    hint: 'Enter source and translated text to check one entry without a PO file.',
     source: 'Source',
     translation: 'Translation',
     check: 'Check',
@@ -97,8 +95,7 @@ export const en = {
   correction: {
     start: 'Edit and recheck',
     title: 'Recheck a revision',
-    hint:
-      'Edits here are for checking only. They do not change the original PO file or the overall results.',
+    hint: 'Edits here are for checking only. They do not change the original PO file or the overall results.',
     translation: 'Translation',
     recheck: 'Recheck',
     cancel: 'Cancel',
@@ -125,7 +122,8 @@ export const en = {
     description:
       'WTC checks items from the WordPress Japanese Translation Style Guide that can be evaluated mechanically. Its results do not guarantee full compliance with the style guide.',
     automatic: '✅ Automated check',
-    automaticBody: 'Items that can be determined mechanically with high confidence.',
+    automaticBody:
+      'Items that can be determined mechanically with high confidence.',
     partial: '△ Partial check',
     partialBody:
       'Items checked only under conditions WTC can determine, such as specific source-text patterns.',

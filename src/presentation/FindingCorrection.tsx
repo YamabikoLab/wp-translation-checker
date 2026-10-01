@@ -146,9 +146,7 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
       </div>
 
       <div className={styles.correctionResult} role="status">
-        {state.status === 'too-large' && (
-          <p>{t('correction.tooLarge')}</p>
-        )}
+        {state.status === 'too-large' && <p>{t('correction.tooLarge')}</p>}
         {state.status === 'checked' &&
           (messages.length === 0 ? (
             <p className={styles.correctionSuccess}>
