@@ -77,7 +77,11 @@ export function PaginationControls({
   return (
     <div className={styles.paginationArea}>
       <p className={styles.paginationRange}>
-        {t('pagination.range', { start: rangeStart, end: rangeEnd, total: totalCount })}
+        {t('pagination.range', {
+          start: rangeStart,
+          end: rangeEnd,
+          total: totalCount,
+        })}
       </p>
 
       <div className={styles.paginationControls}>
