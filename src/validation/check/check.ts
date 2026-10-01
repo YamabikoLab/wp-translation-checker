@@ -3,7 +3,7 @@
  *
  * PO ファイル確認では解析とロケール判定を含む確認全体を扱い、1件確認では既に正規化された翻訳情報を
  * 日本語翻訳スタイルガイドと Glossary の共通検証へ渡す。どちらも同じ正常完了結果を返し、
- * Presentation が個別ルールの呼び出し方を持たなくてよい境界を提供する。
+ * 画面表示層が個別ルールの呼び出し方を持たなくてよい境界を提供する。
  */
 
 import { checkJapaneseGlossary } from '@/glossary/ja/check'
@@ -16,7 +16,7 @@ import { check } from '@/rules/ja/check'
 import type { TranslationCheckResult } from '@/rules/ja/check'
 
 /**
- * 翻訳確認が正常完了した場合に Presentation へ返す共通結果を表す。
+ * 翻訳確認が正常完了した場合に画面表示層へ返す共通結果を表す。
  *
  * 確認対象の正規化済み翻訳情報と、日本語翻訳スタイルガイド・Glossary の確認結果を保持する。
  */
@@ -31,7 +31,7 @@ export type SuccessfulCheckResult = {
  * PO ファイルから開始する1回の翻訳確認結果を表す。
  *
  * 正常完了時は共通の確認結果を返し、解析不能・ロケール判定不能・未対応ロケールは
- * Presentation が利用者へ理由を示せるよう原因別の状態として返す。
+ * 画面表示層が利用者へ理由を示せるよう原因別の状態として返す。
  */
 export type CheckResult =
   | SuccessfulCheckResult
