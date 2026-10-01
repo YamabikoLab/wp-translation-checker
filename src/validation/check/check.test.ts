@@ -368,8 +368,8 @@ describe('Check Orchestration', () => {
    *
    * 期待結果:
    * - success が返る。
-   * - source.plural が保持される。
-   * - Glossary Warning の一致元が plural になる。
+   * - source.plural と翻訳フォームの識別情報が保持される。
+   * - Glossary Warning の一致元が plural になり、同じ翻訳フォームを指す。
    */
   it('when a single entry has plural source text, should preserve it for glossary checking', () => {
     const result = checkEntry({
@@ -378,7 +378,7 @@ describe('Check Orchestration', () => {
         singular: 'One item',
         plural: 'Visit website',
       },
-      translations: [{ index: 0, text: 'ウェブページを見る' }],
+      translations: [{ index: 2, text: 'ウェブページを見る' }],
     })
 
     expect(result.entries).toEqual([
@@ -388,13 +388,14 @@ describe('Check Orchestration', () => {
           singular: 'One item',
           plural: 'Visit website',
         },
-        translations: [{ index: 0, text: 'ウェブページを見る' }],
+        translations: [{ index: 2, text: 'ウェブページを見る' }],
       },
     ])
     expect(result.glossaryResults).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           entryIndex: 0,
+          translationFormIndex: 2,
           originalTerm: 'website',
           sourceMatches: [
             expect.objectContaining({
