@@ -6,7 +6,7 @@
 
 import { useState } from 'react'
 import { checkEntry } from '@/check/check'
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import { ExpandableText } from './ExpandableText'
 import { createFindings, type Finding } from './presentation-model'
 import styles from './TranslationChecker.module.css'
