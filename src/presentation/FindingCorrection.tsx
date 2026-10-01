@@ -105,7 +105,9 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
     >
       <div className={styles.correctionHeading}>
         <div>
-          <h3 id={`correction-title-${finding.key}`}>{t('correction.title')}</h3>
+          <h3 id={`correction-title-${finding.key}`}>
+            {t('correction.title')}
+          </h3>
           <p>{t('correction.hint')}</p>
         </div>
       </div>
@@ -172,7 +174,13 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
                       >
                         {message.severity}
                       </span>
-                      <p>{message.kind === 'glossary' ? t('finding.glossaryMessage', { term: message.glossary.originalTerm }) : message.message}</p>
+                      <p>
+                        {message.kind === 'glossary'
+                          ? t('finding.glossaryMessage', {
+                              term: message.glossary.originalTerm,
+                            })
+                          : message.message}
+                      </p>
                     </div>
                     <ExpandableText
                       text={state.draftTranslation}
@@ -192,7 +200,9 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
                       <span>
                         {message.kind === 'glossary'
                           ? t('finding.glossaryItem')
-                          : t('finding.styleGuideItem', { item: message.styleGuideItem })}
+                          : t('finding.styleGuideItem', {
+                              item: message.styleGuideItem,
+                            })}
                       </span>
                       <a
                         href={
