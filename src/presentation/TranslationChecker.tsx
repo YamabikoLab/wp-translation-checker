@@ -1,7 +1,8 @@
 /**
- * ブラウザーから PO ファイルを選択して確認し、Validation Core の結果を利用者へ表示する責任を持つ。
+ * WTC のトップ画面として、1件の直接入力確認と PO ファイル確認を並べ、確認結果を利用者へ表示する責任を持つ。
  *
- * File API と React の画面状態をこの Presentation 境界に閉じ、個別ルールや locale 判定は再実装しない。
+ * 直接入力の状態は QuickCheck に委ね、PO ファイル確認の File API と画面状態だけをこの Presentation 境界に閉じる。
+ * 個別ルールやロケール判定は再実装せず、Validation の公開入口を利用する。
  */
 
 import {
@@ -40,9 +41,9 @@ const MAX_PO_FILE_SIZE_BYTES = 20 * 1024 * 1024
 type CopyFeedback = 'success' | 'failure' | null
 
 /**
- * WTC v1 のファイル入力、確認開始、結果表示を提供する Presentation コンポーネント。
+ * WTC v1 の直接入力確認、PO ファイル確認、PO 確認結果表示を構成する Presentation コンポーネント。
  *
- * @returns ブラウザー内で完結する翻訳確認画面。
+ * @returns 直接入力と PO ファイル確認の双方をブラウザー内で完結して利用できる翻訳確認画面。
  */
 export function TranslationChecker() {
   const [state, dispatch] = useReducer(presentationReducer, {
