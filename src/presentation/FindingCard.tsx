@@ -6,7 +6,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import { ExpandableText } from './ExpandableText'
 import { FindingCorrection } from './FindingCorrection'
 import { copyFindingMarkdown } from './finding-markdown-copy'
