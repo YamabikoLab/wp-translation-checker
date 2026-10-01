@@ -8,6 +8,7 @@
 
 import { useState } from 'react'
 import { checkEntry } from '@/check/check'
+import { useUiTranslation } from '@/i18n/i18n'
 import {
   createFindings,
   summarizeFindings,
@@ -31,6 +32,7 @@ type QuickCheckResult =
  * @returns PO ファイルを使わない1件確認フォームと結果表示。
  */
 export function QuickCheck() {
+  const { t } = useUiTranslation()
   const [source, setSource] = useState('')
   const [translation, setTranslation] = useState('')
   const [result, setResult] = useState<QuickCheckResult>({ status: 'idle' })
@@ -79,14 +81,14 @@ export function QuickCheck() {
       aria-labelledby="quick-check-title"
     >
       <div>
-        <h2 id="quick-check-title">1文をすぐ確認</h2>
+        <h2 id="quick-check-title">{t('quick.title')}</h2>
         <p className={styles.secondaryText}>
-          原文と翻訳文を入力すると、PO ファイルなしで確認できます。
+          {t('quick.hint')}
         </p>
       </div>
 
       <label className={styles.quickCheckField}>
-        <span>原文</span>
+        <span>{t('quick.source')}</span>
         <textarea
           value={source}
           rows={4}
@@ -99,7 +101,7 @@ export function QuickCheck() {
       </label>
 
       <label className={styles.quickCheckField}>
-        <span>翻訳文</span>
+        <span>{t('quick.translation')}</span>
         <textarea
           value={translation}
           rows={4}
@@ -117,30 +119,24 @@ export function QuickCheck() {
         disabled={!canCheck}
         onClick={handleCheck}
       >
-        確認する
+        {t('quick.check')}
       </button>
 
       <div className={styles.quickCheckStatus} role="status" aria-live="polite">
         {/* 入力上限超過時は通常結果ではなく、確認を実行できない理由を通知する。 */}
         {result.status === 'too-large' && (
-          <p>
-            原文または翻訳文が長すぎるため確認できません。各 100,000
-            文字以下にしてください。
-          </p>
+          <p>{t('quick.tooLarge')}</p>
         )}
         {/* 確認済みの場合だけ、現在入力に対応する Error / Warning 件数を通知する。 */}
         {result.status === 'checked' && (
-          <p>
-            確認完了。Error {summary.errorCount}件、Warning{' '}
-            {summary.warningCount}件です。
-          </p>
+          <p>{t('quick.completed', { errorCount: summary.errorCount, warningCount: summary.warningCount })}</p>
         )}
       </div>
 
       {/* 確認済みで指摘が0件の場合だけ、現在入力に対する指摘なし案内を表示する。 */}
       {result.status === 'checked' && summary.totalCount === 0 && (
         <div className={styles.noFindings}>
-          <p>WTC の自動チェックでは問題が見つかりませんでした。</p>
+          <p>{t('quick.noFindings')}</p>
         </div>
       )}
 
