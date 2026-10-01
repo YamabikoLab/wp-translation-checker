@@ -16,8 +16,9 @@ import {
   waitFor,
   within,
 } from '@testing-library/react'
+import i18n from '@/i18n/i18n'
 import po2js from 'gettext-converter/po2js'
-import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 import App from '../App'
 
 const originalGettext = (
@@ -32,6 +33,11 @@ beforeAll(() => {
       gettext?: { po2js: (source: string) => unknown }
     }
   ).gettext = { po2js }
+})
+
+beforeEach(() => {
+  window.localStorage.clear()
+  void i18n.changeLanguage('ja')
 })
 
 afterEach(() => {
