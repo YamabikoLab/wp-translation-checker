@@ -101,9 +101,9 @@ function createGlossaryFinding(): Finding {
   }
 }
 
-beforeEach(() => {
+beforeEach(async () => {
   window.localStorage.clear()
-  void i18n.changeLanguage('ja')
+  await i18n.changeLanguage('ja')
 })
 
 afterEach(() => {
