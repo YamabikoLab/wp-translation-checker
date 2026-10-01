@@ -111,6 +111,31 @@ describe('QuickCheck', () => {
   })
 
   /**
+   * QuickCheck で指摘が表示されても、直接入力値をクリップボードへ出力する操作を提供しないことを確認する。
+   *
+   * 操作:
+   * - 指摘が発生する原文・翻訳文を入力して確認する。
+   *
+   * 期待結果:
+   * - 指摘内容は表示される。
+   * - 「Markdownをコピー」操作は表示されない。
+   */
+  it('when direct input has findings, should not offer Markdown copy', () => {
+    render(<QuickCheck />)
+
+    checkTranslation('Save settings', '設定を保存して下さい')
+
+    expect(
+      screen.getByText(
+        'スタイルガイド: 3-6 「下さい / 全て / 既に」などの推奨表記',
+      ),
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: 'Markdownをコピー' }),
+    ).toBeNull()
+  })
+
+  /**
    * 問題のない直接入力を確認したとき、指摘なし案内を表示することを確認する。
    *
    * 操作:
@@ -153,27 +178,24 @@ describe('QuickCheck', () => {
   })
 
   /**
-   * 攻撃文字列を直接入力しても HTML として解釈せず、入力文字列として保持することを確認する。
+   * 攻撃文字列を含む直接入力を確認しても、結果表示まで文字列として扱われることを確認する。
    *
    * 操作:
-   * - script / img / javascript URL を含む文字列を翻訳文へ入力する。
+   * - 攻撃文字列とスタイルガイド違反を含む翻訳文を入力して確認する。
    *
    * 期待結果:
-   * - 入力値はそのまま保持され、攻撃用 DOM 要素や実行可能な属性は生成されない。
+   * - 指摘結果が表示される。
+   * - 入力文字列は結果表示でも文字列として扱われ、攻撃用 DOM 要素や実行可能な属性は生成されない。
    */
-  it('when direct input contains XSS payloads, should keep them as text instead of executable DOM', () => {
+  it('when checked direct input contains XSS payloads, should render them as text in the result', () => {
     const { container } = render(<QuickCheck />)
     const payload =
-      '<script>alert(1)</script><img src=x onerror=alert(1)><a href="javascript:alert(1)">test</a>'
+      '<script>alert(1)</script><img src=x onerror=alert(1)><a href="javascript:alert(1)">test</a>WordPressのテーブル'
 
-    fireEvent.change(screen.getByRole('textbox', { name: '翻訳文' }), {
-      target: { value: payload },
-    })
+    checkTranslation('WordPress Table', payload)
 
-    expect(
-      (screen.getByRole('textbox', { name: '翻訳文' }) as HTMLTextAreaElement)
-        .value,
-    ).toBe(payload)
+    expect(screen.getByText(/確認完了。Error 1件、Warning 0件/)).toBeTruthy()
+    expect(container.textContent).toContain(payload)
     expect(container.querySelector('script')).toBeNull()
     expect(container.querySelector('img')).toBeNull()
     expect(container.querySelector('a[href^="javascript:"]')).toBeNull()
