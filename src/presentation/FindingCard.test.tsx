@@ -68,6 +68,28 @@ afterEach(() => {
 
 describe('FindingCard Markdown copy action', () => {
   /**
+   * 利用画面が Markdown コピーを許可しない場合に、指摘内容を保ったままコピー操作だけを提供しないことを確認する。
+   *
+   * 事前条件:
+   * - Markdown コピーを無効にした1件の指摘カードが表示されている。
+   *
+   * 期待結果:
+   * - 指摘内容と修正操作は表示される。
+   * - 「Markdownをコピー」操作は表示されない。
+   */
+  it('when Markdown copy is disabled, should hide only the copy action', () => {
+    render(<FindingCard finding={createFinding()} showMarkdownCopy={false} />)
+
+    expect(screen.getByText(createFinding().message)).toBeTruthy()
+    expect(
+      screen.getByRole('button', { name: '修正して再チェック' }),
+    ).toBeTruthy()
+    expect(
+      screen.queryByRole('button', { name: 'Markdownをコピー' }),
+    ).toBeNull()
+  })
+
+  /**
    * 事前条件:
    * - Clipboard API が利用できる。
    * - 1件の指摘カードが表示されている。
