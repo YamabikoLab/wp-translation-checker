@@ -13,7 +13,7 @@ import {
   type ChangeEvent,
 } from 'react'
 import { checkPo } from '@/check/check'
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import {
   createFindings,
   createPaginationModel,
