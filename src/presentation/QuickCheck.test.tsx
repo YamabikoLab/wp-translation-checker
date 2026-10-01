@@ -32,6 +32,21 @@ function checkTranslation(source: string, translation: string) {
 
 describe('QuickCheck', () => {
   /**
+   * クイックチェックの結果通知領域が確認前から存在し、結果更新を支援技術へ通知できることを確認する。
+   *
+   * 事前条件:
+   * - まだ直接入力の確認を実行していない。
+   *
+   * 期待結果:
+   * - 空の status 領域が存在し、確認後の内容更新を通知できる。
+   */
+  it('when quick check is idle, should keep an empty status region mounted', () => {
+    render(<QuickCheck />)
+
+    expect(screen.getByRole('status').textContent).toBe('')
+  })
+
+  /**
    * 原文または翻訳文が未入力の場合に、確認を開始できないことを確認する。
    *
    * 事前条件:
