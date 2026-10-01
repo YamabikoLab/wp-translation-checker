@@ -1,7 +1,8 @@
 /**
- * Style Guide / Glossary を共通の1指摘カードとして表示し、原文・翻訳比較、修正案の再チェック、一次情報参照、Markdown コピーを提供する。
+ * Style Guide / Glossary を共通の1指摘カードとして表示し、原文・翻訳比較、修正案の再チェック、一次情報参照を提供する。
  *
- * 指摘種別ごとの差分は根拠情報の表示だけに閉じ、一覧操作や修正操作は共通 Finding の契約を利用する。
+ * Markdown コピーは利用する画面の出力方針に応じて提供し、指摘種別ごとの差分は根拠情報の表示だけに閉じる。
+ * 一覧操作や修正操作は共通 Finding の契約を利用する。
  */
 
 import { useEffect, useState } from 'react'
@@ -21,9 +22,16 @@ const GLOSSARY_URL =
  *
  * @param props 指摘表示に必要な属性。
  * @param props.finding 表示対象の1指摘。
+ * @param props.showMarkdownCopy Markdown コピーを提供する場合は true。省略時は既存の指摘一覧と同様に提供する。
  * @returns 共通の比較・修正操作と、指摘種別に応じた根拠情報を含むカード。
  */
-export function FindingCard({ finding }: { finding: Finding }) {
+export function FindingCard({
+  finding,
+  showMarkdownCopy = true,
+}: {
+  finding: Finding
+  showMarkdownCopy?: boolean
+}) {
   const translation =
     finding.entry.translations.find(
       (form) => form.index === finding.translationFormIndex,
@@ -146,19 +154,22 @@ export function FindingCard({ finding }: { finding: Finding }) {
               : 'WordPress 日本語翻訳スタイルガイドを確認'}
           </a>
         </p>
-        <button
-          type="button"
-          className={styles.findingCopyButton}
-          onClick={handleMarkdownCopy}
-        >
-          <span aria-live="polite">
-            {copyFeedback === 'success'
-              ? 'コピーしました'
-              : copyFeedback === 'failure'
-                ? 'コピーできませんでした'
-                : 'Markdownをコピー'}
-          </span>
-        </button>
+        {/* このカードを利用する画面がクリップボード出力を許可する場合だけ、Markdown コピー操作を提供する。 */}
+        {showMarkdownCopy && (
+          <button
+            type="button"
+            className={styles.findingCopyButton}
+            onClick={handleMarkdownCopy}
+          >
+            <span aria-live="polite">
+              {copyFeedback === 'success'
+                ? 'コピーしました'
+                : copyFeedback === 'failure'
+                  ? 'コピーできませんでした'
+                  : 'Markdownをコピー'}
+            </span>
+          </button>
+        )}
       </div>
     </article>
   )
