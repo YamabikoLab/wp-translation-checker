@@ -4,7 +4,7 @@
  * 詳細なルール定義は要件定義書を正本とし、この表示では翻訳作業中に必要な概要と公開サマリーへの導線だけを提供する。
  */
 
-import { useUiTranslation } from '@/i18n/i18n'
+import { useUiTranslation } from '../i18n/i18n'
 import styles from './TranslationChecker.module.css'
 
 const REQUIREMENTS_URL =
