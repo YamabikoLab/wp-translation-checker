@@ -129,4 +129,45 @@ describe('PaginationControls', () => {
     expect(screen.queryByRole('navigation')).toBeNull()
     expect(screen.getByLabelText('表示件数')).toBeTruthy()
   })
+
+  /**
+   * English UI ではページ移動の支援技術向け名称も英語へ切り替わることを確認する。
+   *
+   * 事前条件:
+   * - 複数ページの指摘一覧がある。
+   * - UI 言語は English である。
+   *
+   * 操作:
+   * - ページ移動操作を表示する。
+   *
+   * 期待結果:
+   * - ナビゲーション、前後移動、直接入力のアクセシブルな名称が英語で提供される。
+   */
+  it('when the UI language is English, should translate navigation accessibility labels', async () => {
+    await i18n.changeLanguage('en')
+
+    render(
+      <PaginationControls
+        currentPage={2}
+        totalPages={3}
+        pageSize={25}
+        totalCount={60}
+        rangeStart={26}
+        rangeEnd={50}
+        items={[1, 2, 3]}
+        onPageChange={() => undefined}
+        onPageSizeChange={() => undefined}
+      />,
+    )
+
+    expect(
+      screen.getByRole('navigation', { name: 'Findings pagination' }),
+    ).toBeTruthy()
+    expect(
+      screen.getByRole('button', { name: 'Previous page' }),
+    ).toBeTruthy()
+    expect(screen.getByRole('button', { name: 'Next page' })).toBeTruthy()
+    expect(screen.getByRole('textbox', { name: 'Go to page' })).toBeTruthy()
+  })
+
 })
