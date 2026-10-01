@@ -4,6 +4,7 @@
  * 画面状態の判定結果だけを受け取り、確認処理や状態遷移は扱わない。
  */
 
+import { useUiTranslation } from '@/i18n/i18n'
 import type { PresentationState } from './presentation-model'
 
 /**
@@ -18,57 +19,46 @@ export function Feedback({
 }: {
   state: Extract<PresentationState, { status: 'feedback' }>
 }) {
+  const { t } = useUiTranslation()
+
   switch (state.reason) {
     case 'file-too-large':
       return (
         <>
-          <h2>ファイルが大きすぎます</h2>
-          <p>
-            20 MiB 以下の .po
-            ファイルを選択してください。大きなファイルは読み込みを開始しません。
-          </p>
+          <h2>{t('feedback.tooLargeTitle')}</h2>
+          <p>{t('feedback.tooLargeBody')}</p>
         </>
       )
 
     case 'file-read-failure':
       return (
         <>
-          <h2>ファイルを読み取れませんでした</h2>
-          <p>別の .po ファイルを選択して、もう一度確認してください。</p>
+          <h2>{t('feedback.readFailureTitle')}</h2>
+          <p>{t('feedback.readFailureBody')}</p>
         </>
       )
 
     case 'invalid-po':
       return (
         <>
-          <h2>PO ファイルを正常に確認できませんでした</h2>
-          <p>
-            確認可能な PO
-            として解釈できませんでした。ファイル内容を確認するか、別の .po
-            ファイルを選択してください。
-          </p>
+          <h2>{t('feedback.invalidPoTitle')}</h2>
+          <p>{t('feedback.invalidPoBody')}</p>
         </>
       )
 
     case 'unresolved-locale':
       return (
         <>
-          <h2>ロケールを判定できませんでした</h2>
-          <p>
-            対象ロケールを特定できないため確認を続行できません。PO ファイルの
-            Language ヘッダーを確認してください。
-          </p>
+          <h2>{t('feedback.unresolvedTitle')}</h2>
+          <p>{t('feedback.unresolvedBody')}</p>
         </>
       )
 
     case 'unsupported-locale':
       return (
         <>
-          <h2>このロケールには対応していません</h2>
-          <p>
-            判定されたロケールは「{state.locale}
-            」です。現在は日本語（ja）のみ対応しています。
-          </p>
+          <h2>{t('feedback.unsupportedTitle')}</h2>
+          <p>{t('feedback.unsupportedBody', { locale: state.locale })}</p>
         </>
       )
   }
