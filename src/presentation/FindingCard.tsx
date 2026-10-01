@@ -6,6 +6,7 @@
  */
 
 import { useEffect, useState } from 'react'
+import { useUiTranslation } from '@/i18n/i18n'
 import { ExpandableText } from './ExpandableText'
 import { FindingCorrection } from './FindingCorrection'
 import { copyFindingMarkdown } from './finding-markdown-copy'
@@ -32,6 +33,7 @@ export function FindingCard({
   finding: Finding
   showMarkdownCopy?: boolean
 }) {
+  const { t } = useUiTranslation()
   const translation =
     finding.entry.translations.find(
       (form) => form.index === finding.translationFormIndex,
@@ -84,19 +86,19 @@ export function FindingCard({
         >
           {finding.severity}
         </span>
-        <p className={styles.findingMessage}>{finding.message}</p>
+        <p className={styles.findingMessage}>{finding.kind === 'glossary' ? t('finding.glossaryMessage', { term: finding.glossary.originalTerm }) : finding.message}</p>
       </div>
 
       <div className={styles.comparison}>
         <section className={styles.comparisonPanel}>
-          <h3>原文</h3>
+          <h3>{t('finding.source')}</h3>
           <ExpandableText
             text={finding.entry.source.singular}
             matches={singularMatches}
           />
           {finding.entry.source.plural !== undefined && (
             <div className={styles.pluralSource}>
-              <h4>複数形原文</h4>
+              <h4>{t('finding.pluralSource')}</h4>
               <ExpandableText
                 text={finding.entry.source.plural}
                 matches={pluralMatches}
@@ -105,7 +107,7 @@ export function FindingCard({
           )}
         </section>
         <section className={styles.comparisonPanel}>
-          <h3>翻訳</h3>
+          <h3>{t('finding.translation')}</h3>
           <ExpandableText text={translation} matches={finding.matches} />
         </section>
       </div>
@@ -113,14 +115,14 @@ export function FindingCard({
       {finding.kind === 'glossary' && (
         <div className={styles.glossaryContent}>
           <div>
-            <h3>Glossary の候補</h3>
+            <h3>{t('finding.glossaryCandidates')}</h3>
             <ul>
               {finding.glossary.candidates.map((candidate, index) => (
                 <li
                   key={`${candidate.translation}-${candidate.partOfSpeech ?? ''}-${index}`}
                 >
                   <strong>
-                    {candidate.translation || '（訳文へ入れない）'}
+                    {candidate.translation || t('finding.omittedTranslation')}
                   </strong>
                   {candidate.partOfSpeech !== undefined && (
                     <span> / {candidate.partOfSpeech}</span>
@@ -141,8 +143,8 @@ export function FindingCard({
         <p className={styles.guideReference}>
           <span>
             {finding.kind === 'glossary'
-              ? '確認項目: Glossary'
-              : `スタイルガイド: ${finding.styleGuideItem}`}
+              ? t('finding.glossaryItem')
+              : t('finding.styleGuideItem', { item: finding.styleGuideItem })}
           </span>
           <a
             href={finding.kind === 'glossary' ? GLOSSARY_URL : STYLE_GUIDE_URL}
@@ -150,8 +152,8 @@ export function FindingCard({
             rel="noreferrer"
           >
             {finding.kind === 'glossary'
-              ? 'WordPress.org 日本語 Glossary を確認'
-              : 'WordPress 日本語翻訳スタイルガイドを確認'}
+              ? t('finding.glossaryLink')
+              : t('finding.styleGuideLink')}
           </a>
         </p>
         {/* このカードを利用する画面がクリップボード出力を許可する場合だけ、Markdown コピー操作を提供する。 */}
@@ -163,10 +165,10 @@ export function FindingCard({
           >
             <span aria-live="polite">
               {copyFeedback === 'success'
-                ? 'コピーしました'
+                ? t('finding.copied')
                 : copyFeedback === 'failure'
-                  ? 'コピーできませんでした'
-                  : 'Markdownをコピー'}
+                  ? t('finding.copyFailed')
+                  : t('finding.copyMarkdown')}
             </span>
           </button>
         )}
