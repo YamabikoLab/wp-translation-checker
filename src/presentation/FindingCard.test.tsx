@@ -15,7 +15,8 @@ import {
   screen,
   within,
 } from '@testing-library/react'
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import i18n from '@/i18n/i18n'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import type { Finding } from './presentation-model'
 import { FindingCard } from './FindingCard'
 
@@ -60,6 +61,11 @@ function createFinding(
     },
   }
 }
+
+beforeEach(() => {
+  window.localStorage.clear()
+  void i18n.changeLanguage('ja')
+})
 
 afterEach(() => {
   cleanup()
@@ -327,4 +333,25 @@ describe('FindingCard Glossary presentation', () => {
       }),
     ).toBeTruthy()
   })
+
+  it('when a glossary finding is shown in English, should translate the glossary message for the English UI', async () => {
+    await i18n.changeLanguage('en')
+    const glossaryFinding: Finding = {
+      key: 'english-glossary',
+      kind: 'glossary',
+      severity: 'Warning',
+      styleGuideItem: 'Glossary',
+      message: '「website」の Glossary 訳語を確認してください',
+      matches: [],
+      translationFormIndex: 0,
+      entry: { entryIndex: 0, source: { singular: 'Visit website' }, translations: [{ index: 0, text: 'ウェブページを見る' }] },
+      glossary: { entryIndex: 0, translationFormIndex: 0, originalTerm: 'website', candidates: [{ original: 'website', translation: 'サイト' }], sourceMatches: [{ source: 'singular', start: 6, end: 13 }] },
+    }
+
+    render(<FindingCard finding={glossaryFinding} />)
+
+    expect(screen.getByText('Check the Glossary translation for “website”')).toBeTruthy()
+    expect(screen.queryByText('「website」の Glossary 訳語を確認してください')).toBeNull()
+  })
+
 })
