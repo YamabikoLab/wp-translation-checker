@@ -86,7 +86,7 @@ function createPoFile(source: string, name = 'sample.po'): File {
  * @param file 確認対象として選択する File。
  */
 function selectAndCheck(file: File) {
-  const fileInput = screen.getByLabelText('.po ファイル')
+  const fileInput = screen.getByLabelText('ファイルを選択')
   const fileSection = fileInput.closest('section')
 
   if (fileSection === null) {
@@ -108,6 +108,7 @@ describe('TranslationChecker', () => {
    *
    * 期待結果:
    * - アプリ見出し、クイックチェック、PO ファイル入力が英語で表示される。
+   * - ファイル選択操作と未選択状態も英語で表示される。
    */
   it('when English is selected, should switch the main UI to English', async () => {
     render(<App />)
@@ -123,7 +124,8 @@ describe('TranslationChecker', () => {
     expect(
       screen.getByRole('heading', { name: 'Select a PO file' }),
     ).toBeTruthy()
-    expect(screen.getByLabelText('.po file')).toBeTruthy()
+    expect(screen.getByLabelText('Choose file')).toBeTruthy()
+    expect(screen.getByText('No file selected')).toBeTruthy()
   })
 
   /**
@@ -131,6 +133,7 @@ describe('TranslationChecker', () => {
    *
    * 期待結果:
    * - 「1文をすぐ確認」が「PO ファイルを選択」より前に表示される。
+   * - ファイル選択操作と未選択状態が日本語で表示される。
    */
   it('when the screen is rendered, should place quick check before the PO file input', () => {
     render(<App />)
@@ -146,6 +149,8 @@ describe('TranslationChecker', () => {
       quickCheckHeading.compareDocumentPosition(fileInputHeading) &
         Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy()
+    expect(screen.getByLabelText('ファイルを選択')).toBeTruthy()
+    expect(screen.getByText('選択されていません')).toBeTruthy()
   })
 
   /**
