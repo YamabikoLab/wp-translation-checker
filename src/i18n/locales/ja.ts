@@ -21,6 +21,8 @@ export const ja = {
     fileTitle: 'PO ファイルを選択',
     fileHint: 'ファイルを選択しただけでは確認を開始しません。',
     fileLabel: '.po ファイル',
+    chooseFile: 'ファイルを選択',
+    noFileSelected: '選択されていません',
     selectedFile: '選択中: {{fileName}}',
     checking: '確認中…',
     check: '確認する',
