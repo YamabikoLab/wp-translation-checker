@@ -101,6 +101,34 @@ function selectAndCheck(file: File) {
 
 describe('TranslationChecker', () => {
   /**
+   * 表示言語を English に切り替えたとき、トップ画面の主要 UI が英語表示へ切り替わることを確認する。
+   *
+   * 操作:
+   * - 表示言語で English を選択する。
+   *
+   * 期待結果:
+   * - アプリ見出し、クイックチェック、PO ファイル入力が英語で表示される。
+   */
+  it('when English is selected, should switch the main UI to English', async () => {
+    render(<App />)
+
+    fireEvent.change(screen.getByRole('combobox', { name: '表示言語' }), {
+      target: { value: 'en' },
+    })
+
+    expect(
+      await screen.findByRole('heading', { name: 'WP Translation Checker' }),
+    ).toBeTruthy()
+    expect(
+      screen.getByRole('heading', { name: 'Quick check' }),
+    ).toBeTruthy()
+    expect(
+      screen.getByRole('heading', { name: 'Select a PO file' }),
+    ).toBeTruthy()
+    expect(screen.getByLabelText('.po file')).toBeTruthy()
+  })
+
+  /**
    * トップ画面でクイックチェックが PO ファイル入力より先に案内されることを確認する。
    *
    * 期待結果:
