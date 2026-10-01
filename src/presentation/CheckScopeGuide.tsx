@@ -4,6 +4,7 @@
  * 詳細なルール定義は要件定義書を正本とし、この表示では翻訳作業中に必要な概要と公開サマリーへの導線だけを提供する。
  */
 
+import { useUiTranslation } from '@/i18n/i18n'
 import styles from './TranslationChecker.module.css'
 
 const REQUIREMENTS_URL =
@@ -14,11 +15,12 @@ const STYLE_GUIDE_URL =
   'https://ja.wordpress.org/team/handbook/translation/translation-style-guide/'
 
 /**
- * 結果概要に常時表示する WTC のチェック範囲案内。
+ * 結果概要に常時表示する {t('scope.title')}案内。
  *
  * @returns 自動チェック・一部チェック・手動確認の役割分担と詳細資料への導線。
  */
 export function CheckScopeGuide() {
+  const { t } = useUiTranslation()
   return (
     <section
       className={styles.scopeGuide}
@@ -26,53 +28,52 @@ export function CheckScopeGuide() {
     >
       <div className={styles.scopeGuideHeader}>
         <h3 id="check-scope-guide-title">WTC のチェック範囲</h3>
-        <span className={styles.scopeGuideSummaryNote}>13項目をチェック</span>
+        <span className={styles.scopeGuideSummaryNote}>{t('scope.summary')}</span>
       </div>
 
       <div className={styles.scopeGuideContent}>
         <p>
-          WTC は WordPress
-          日本語翻訳スタイルガイドのうち、機械的に判定できる項目を確認します。チェック結果だけでスタイルガイド全体への準拠を保証するものではありません。
+          {t('scope.description')}
         </p>
 
         <dl className={styles.scopeGuideLegend}>
           <div>
-            <dt>✅ 自動チェック</dt>
-            <dd>機械的に高い確度で判定できる項目。</dd>
+            <dt>{t('scope.automatic')}</dt>
+            <dd>{t('scope.automaticBody')}</dd>
           </div>
           <div>
-            <dt>△ 一部チェック</dt>
+            <dt>{t('scope.partial')}</dt>
             <dd>
-              特定の原文パターンなど、判定できる条件に限って確認する項目。
+              {t('scope.partialBody')}
             </dd>
           </div>
           <div>
-            <dt>👀 手動確認</dt>
-            <dd>文脈・意味・自然さなど、人による判断が必要な項目。</dd>
+            <dt>{t('scope.manual')}</dt>
+            <dd>{t('scope.manualBody')}</dd>
           </div>
         </dl>
 
         <div className={styles.manualCheck}>
-          <h3>手動で確認したい主な項目</h3>
+          <h3>{t('scope.manualTitle')}</h3>
           <ul>
-            <li>自然な日本語になっているか</li>
-            <li>訳語やボタン名が統一されているか</li>
-            <li>カタカナ語・長音表記</li>
-            <li>ブランド名・機能名</li>
-            <li>日付・日時の表記</li>
-            <li>プレースホルダーの扱い</li>
+            <li>{t('scope.manualNatural')}</li>
+            <li>{t('scope.manualTerms')}</li>
+            <li>{t('scope.manualKatakana')}</li>
+            <li>{t('scope.manualBrand')}</li>
+            <li>{t('scope.manualDate')}</li>
+            <li>{t('scope.manualPlaceholder')}</li>
           </ul>
         </div>
 
         <p className={styles.scopeGuideLinks}>
           <a href={README_URL} target="_blank" rel="noreferrer">
-            詳しい対応状況を見る
+            {t('scope.readStatus')}
           </a>
           <a href={REQUIREMENTS_URL} target="_blank" rel="noreferrer">
-            要件定義書を見る
+            {t('scope.readRequirements')}
           </a>
           <a href={STYLE_GUIDE_URL} target="_blank" rel="noreferrer">
-            WordPress 日本語翻訳スタイルガイドを見る
+            {t('scope.readStyleGuide')}
           </a>
         </p>
       </div>
