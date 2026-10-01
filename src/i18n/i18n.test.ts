@@ -6,9 +6,13 @@
  * WTC の UI 初期言語決定について、保存済み選択、ブラウザー言語、英語 fallback と文書同期を確認する。
  */
 
-import { afterEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 const originalLanguage = navigator.language
+
+beforeEach(() => {
+  vi.resetModules()
+})
 
 afterEach(() => {
   window.localStorage.clear()
