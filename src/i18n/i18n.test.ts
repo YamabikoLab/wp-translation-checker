@@ -76,6 +76,32 @@ describe('UI i18n initialization', () => {
   })
 
   /**
+   * 保存値が WTC の対応言語でない場合に、その値を採用せずブラウザー言語から決定することを確認する。
+   *
+   * 事前条件:
+   * - 未対応の UI 言語が保存されている。
+   * - ブラウザー言語は日本語である。
+   *
+   * 操作:
+   * - UI i18n を初期化する。
+   *
+   * 期待結果:
+   * - 不正な保存値は無視され、日本語 UI が選択される。
+   */
+  it('when an unsupported language is stored, should ignore it and use the supported browser language', async () => {
+    window.localStorage.setItem('wtc-ui-language', 'fr')
+    Object.defineProperty(navigator, 'language', {
+      configurable: true,
+      value: 'ja-JP',
+    })
+
+    const { default: i18n } = await import('./i18n')
+
+    expect(i18n.resolvedLanguage).toBe('ja')
+    expect(document.documentElement.lang).toBe('ja')
+  })
+
+  /**
    * 保存済み言語がなくブラウザー言語も未対応の場合に、英語へ fallback することを確認する。
    *
    * 事前条件:
