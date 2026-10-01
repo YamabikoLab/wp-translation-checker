@@ -120,12 +120,14 @@ export function QuickCheck() {
       </button>
 
       <div className={styles.quickCheckStatus} role="status" aria-live="polite">
+        {/* 入力上限超過時は通常結果ではなく、確認を実行できない理由を通知する。 */}
         {result.status === 'too-large' && (
           <p>
             原文または翻訳文が長すぎるため確認できません。各 100,000
             文字以下にしてください。
           </p>
         )}
+        {/* 確認済みの場合だけ、現在入力に対応する Error / Warning 件数を通知する。 */}
         {result.status === 'checked' && (
           <p>
             確認完了。Error {summary.errorCount}件、Warning{' '}
