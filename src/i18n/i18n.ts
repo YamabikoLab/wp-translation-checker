@@ -42,7 +42,7 @@ void i18n.use(initReactI18next).init({
   fallbackLng: DEFAULT_LANGUAGE,
   supportedLngs: ['ja', 'en'],
   interpolation: { escapeValue: false },
-  initImmediate: false,
+  initAsync: false,
 })
 
 syncDocument((i18n.resolvedLanguage === 'ja' ? 'ja' : 'en') as UiLanguage)
