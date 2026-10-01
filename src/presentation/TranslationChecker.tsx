@@ -279,21 +279,25 @@ export function TranslationChecker() {
           <p className={styles.secondaryText}>{t('app.fileHint')}</p>
         </div>
 
-        <label className={styles.fileInput}>
+        <div className={styles.fileInput}>
           <span>{t('app.fileLabel')}</span>
-          <input
-            type="file"
-            accept=".po,text/x-gettext-translation"
-            onChange={handleFileChange}
-          />
-        </label>
-
-        {/* 実ファイルが選択済みの場合だけ、現在の確認対象を利用者へ示す。 */}
-        {selectedFile !== null && (
-          <p className={styles.selectedFile}>
-            {t('app.selectedFile', { fileName: selectedFile.name })}
-          </p>
-        )}
+          <div className={styles.filePicker}>
+            <label className={styles.filePickerButton}>
+              <span>{t('app.chooseFile')}</span>
+              <input
+                className={styles.filePickerInput}
+                type="file"
+                accept=".po,text/x-gettext-translation"
+                onChange={handleFileChange}
+              />
+            </label>
+            <span className={styles.selectedFile} aria-live="polite">
+              {selectedFile === null
+                ? t('app.noFileSelected')
+                : t('app.selectedFile', { fileName: selectedFile.name })}
+            </span>
+          </div>
+        </div>
 
         {/* 入力未選択または確認進行中は、新しい確認を開始できない状態として操作を無効化する。 */}
         <button
