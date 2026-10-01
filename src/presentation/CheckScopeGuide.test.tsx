@@ -7,7 +7,7 @@
  */
 
 import { cleanup, render, screen } from '@testing-library/react'
-import i18n from '@/i18n/i18n'
+import i18n from '../i18n/i18n'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { CheckScopeGuide } from './CheckScopeGuide'
 
