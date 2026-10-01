@@ -406,4 +406,20 @@ describe('FindingCorrection', () => {
       screen.getByText('「website」の Glossary 訳語を確認してください'),
     ).toBeTruthy()
   })
+
+  it('when a glossary warning remains in English, should translate the recheck message for the English UI', async () => {
+    await i18n.changeLanguage('en')
+    render(<FindingCorrection finding={createGlossaryFinding()} />)
+
+    fireEvent.click(screen.getByRole('button', { name: 'Edit and recheck' }))
+    fireEvent.click(screen.getByRole('button', { name: 'Recheck' }))
+
+    expect(
+      screen.getByText('Check the Glossary translation for “website”'),
+    ).toBeTruthy()
+    expect(
+      screen.queryByText('「website」の Glossary 訳語を確認してください'),
+    ).toBeNull()
+  })
+
 })
