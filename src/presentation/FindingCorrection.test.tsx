@@ -7,7 +7,8 @@
  */
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
-import { afterEach, describe, expect, it } from 'vitest'
+import i18n from '@/i18n/i18n'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import type { Finding } from './presentation-model'
 import { FindingCorrection } from './FindingCorrection'
 
@@ -99,6 +100,11 @@ function createGlossaryFinding(): Finding {
     },
   }
 }
+
+beforeEach(() => {
+  window.localStorage.clear()
+  void i18n.changeLanguage('ja')
+})
 
 afterEach(() => {
   cleanup()
