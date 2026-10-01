@@ -16,6 +16,36 @@
   margin-bottom: 32px;
 }
 
+.introTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.languageSwitcher {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.languageSwitcher select {
+  padding: 6px 28px 6px 8px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
+.languageSwitcher select:focus-visible {
+  outline: 3px solid var(--color-focus);
+  outline-offset: 3px;
+}
+
 .eyebrow {
   margin: 0 0 8px;
   color: var(--color-accent);
@@ -845,6 +875,11 @@
   .feedback,
   .summary {
     padding: 22px;
+  }
+
+  .introTop {
+    align-items: flex-start;
+    flex-direction: column;
   }
 
   .counts {
