@@ -18,7 +18,15 @@ import {
 } from '@testing-library/react'
 import i18n from '@/i18n/i18n'
 import po2js from 'gettext-converter/po2js'
-import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+} from 'vitest'
 import App from '../App'
 
 const originalGettext = (
