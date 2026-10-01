@@ -336,22 +336,14 @@ describe('FindingCard Glossary presentation', () => {
 
   it('when a glossary finding is shown in English, should translate the glossary message for the English UI', async () => {
     await i18n.changeLanguage('en')
-    const glossaryFinding: Finding = {
-      key: 'english-glossary',
-      kind: 'glossary',
-      severity: 'Warning',
-      styleGuideItem: 'Glossary',
-      message: '「website」の Glossary 訳語を確認してください',
-      matches: [],
-      translationFormIndex: 0,
-      entry: { entryIndex: 0, source: { singular: 'Visit website' }, translations: [{ index: 0, text: 'ウェブページを見る' }] },
-      glossary: { entryIndex: 0, translationFormIndex: 0, originalTerm: 'website', candidates: [{ original: 'website', translation: 'サイト' }], sourceMatches: [{ source: 'singular', start: 6, end: 13 }] },
-    }
 
     render(<FindingCard finding={glossaryFinding} />)
 
-    expect(screen.getByText('Check the Glossary translation for “website”')).toBeTruthy()
-    expect(screen.queryByText('「website」の Glossary 訳語を確認してください')).toBeNull()
+    expect(
+      screen.getByText('Check the Glossary translation for “website”'),
+    ).toBeTruthy()
+    expect(
+      screen.queryByText('「website」の Glossary 訳語を確認してください'),
+    ).toBeNull()
   })
-
 })
