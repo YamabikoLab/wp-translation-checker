@@ -14,6 +14,7 @@ import {
   render,
   screen,
   waitFor,
+  within,
 } from '@testing-library/react'
 import po2js from 'gettext-converter/po2js'
 import { afterAll, afterEach, beforeAll, describe, expect, it } from 'vitest'
@@ -71,13 +72,42 @@ function createPoFile(source: string, name = 'sample.po'): File {
  * @param file 確認対象として選択する File。
  */
 function selectAndCheck(file: File) {
-  fireEvent.change(screen.getByLabelText('.po ファイル'), {
+  const fileInput = screen.getByLabelText('.po ファイル')
+  const fileSection = fileInput.closest('section')
+
+  if (fileSection === null) {
+    throw new Error('PO ファイル入力を含むセクションがありません。')
+  }
+
+  fireEvent.change(fileInput, {
     target: { files: [file] },
   })
-  fireEvent.click(screen.getByRole('button', { name: '確認する' }))
+  fireEvent.click(within(fileSection).getByRole('button', { name: '確認する' }))
 }
 
 describe('TranslationChecker', () => {
+  /**
+   * トップ画面でクイックチェックが PO ファイル入力より先に案内されることを確認する。
+   *
+   * 期待結果:
+   * - 「1文をすぐ確認」が「PO ファイルを選択」より前に表示される。
+   */
+  it('when the screen is rendered, should place quick check before the PO file input', () => {
+    render(<App />)
+
+    const quickCheckHeading = screen.getByRole('heading', {
+      name: '1文をすぐ確認',
+    })
+    const fileInputHeading = screen.getByRole('heading', {
+      name: 'PO ファイルを選択',
+    })
+
+    expect(
+      quickCheckHeading.compareDocumentPosition(fileInputHeading) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy()
+  })
+
   /**
    * 事前条件:
    * - 日本語ロケールで指摘のない正常な PO がある。

@@ -366,4 +366,38 @@ describe('FindingCorrection', () => {
       screen.queryByText('この翻訳では問題は見つかりませんでした。'),
     ).toBeNull()
   })
+  /**
+   * 複数形原文を持つ指摘の修正案を再チェックしたとき、plural 原文を失わず Glossary 判定へ渡すことを確認する。
+   *
+   * 事前条件:
+   * - singular には Glossary 語がなく、plural にのみ website が含まれる。
+   *
+   * 操作:
+   * - 修正案をそのまま再チェックする。
+   *
+   * 期待結果:
+   * - plural 原文由来の Glossary Warning が表示される。
+   */
+  it('when a finding has plural source text, should preserve it during recheck', () => {
+    const finding: Finding = {
+      ...createFinding('項目を確認'),
+      entry: {
+        entryIndex: 0,
+        source: {
+          singular: 'One item',
+          plural: 'Visit website',
+        },
+        translations: [{ index: 0, text: '項目を確認' }],
+      },
+    }
+
+    render(<FindingCorrection finding={finding} />)
+
+    fireEvent.click(screen.getByRole('button', { name: '修正して再チェック' }))
+    fireEvent.click(screen.getByRole('button', { name: '再チェック' }))
+
+    expect(
+      screen.getByText('「website」の Glossary 訳語を確認してください'),
+    ).toBeTruthy()
+  })
 })

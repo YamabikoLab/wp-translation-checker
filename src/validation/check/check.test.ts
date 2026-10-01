@@ -7,7 +7,7 @@
 
 import po2js from 'gettext-converter/po2js'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
-import { checkPo } from './check'
+import { checkEntry, checkPo } from './check'
 
 /**
  * テスト開始前のブラウザー用パーサー状態を保持し、テスト終了後に実行環境を元へ戻すために利用する。
@@ -353,6 +353,55 @@ describe('Check Orchestration', () => {
           translationFormIndex: 0,
           originalTerm: 'website',
           currentTranslation: 'Web ページを見る',
+        }),
+      ]),
+    )
+  })
+  /**
+   * 1件チェック入口へ plural 原文を含む entry を渡したとき、原文情報を保持したまま Glossary 確認へ渡すことを確認する。
+   *
+   * 事前条件:
+   * - singular には Glossary 語がなく、plural にのみ website が含まれる。
+   *
+   * 操作:
+   * - 正規化済み entry を1件チェック入口へ渡す。
+   *
+   * 期待結果:
+   * - success が返る。
+   * - source.plural と翻訳フォームの識別情報が保持される。
+   * - Glossary Warning の一致元が plural になり、同じ翻訳フォームを指す。
+   */
+  it('when a single entry has plural source text, should preserve it for glossary checking', () => {
+    const result = checkEntry({
+      entryIndex: 8,
+      source: {
+        singular: 'One item',
+        plural: 'Visit website',
+      },
+      translations: [{ index: 2, text: 'ウェブページを見る' }],
+    })
+
+    expect(result.entries).toEqual([
+      {
+        entryIndex: 0,
+        source: {
+          singular: 'One item',
+          plural: 'Visit website',
+        },
+        translations: [{ index: 2, text: 'ウェブページを見る' }],
+      },
+    ])
+    expect(result.glossaryResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          entryIndex: 0,
+          translationFormIndex: 2,
+          originalTerm: 'website',
+          sourceMatches: [
+            expect.objectContaining({
+              source: 'plural',
+            }),
+          ],
         }),
       ]),
     )

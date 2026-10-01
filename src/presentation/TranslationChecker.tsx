@@ -1,7 +1,8 @@
 /**
- * ブラウザーから PO ファイルを選択して確認し、Validation Core の結果を利用者へ表示する責任を持つ。
+ * WTC のトップ画面として、1件の直接入力確認と PO ファイル確認を並べ、確認結果を利用者へ表示する責任を持つ。
  *
- * File API と React の画面状態をこの Presentation 境界に閉じ、個別ルールや locale 判定は再実装しない。
+ * 直接入力の状態は QuickCheck に委ね、PO ファイル確認の File API と画面状態だけをこの画面表示境界に閉じる。
+ * 個別ルールやロケール判定は再実装せず、検証処理の公開入口を利用する。
  */
 
 import {
@@ -27,6 +28,7 @@ import { CheckScopeGuide } from './CheckScopeGuide'
 import { Feedback } from './Feedback'
 import { FindingCard } from './FindingCard'
 import { PaginationControls } from './PaginationControls'
+import { QuickCheck } from './QuickCheck'
 import { serializeCsv, serializeJson, serializeMarkdown } from './result-export'
 import styles from './TranslationChecker.module.css'
 
@@ -39,9 +41,9 @@ const MAX_PO_FILE_SIZE_BYTES = 20 * 1024 * 1024
 type CopyFeedback = 'success' | 'failure' | null
 
 /**
- * WTC v1 のファイル入力、確認開始、結果表示を提供する Presentation コンポーネント。
+ * WTC v1 の直接入力確認、PO ファイル確認、PO 確認結果表示を構成する画面コンポーネント。
  *
- * @returns ブラウザー内で完結する翻訳確認画面。
+ * @returns 直接入力と PO ファイル確認の双方をブラウザー内で完結して利用できる翻訳確認画面。
  */
 export function TranslationChecker() {
   const [state, dispatch] = useReducer(presentationReducer, {
@@ -267,9 +269,11 @@ export function TranslationChecker() {
           の登録訳語をブラウザー内で確認します。
         </p>
         <p className={styles.privacy}>
-          選択した翻訳内容は外部の確認サービスへ送信しません。
+          入力・選択した翻訳内容は外部の確認サービスへ送信しません。
         </p>
       </header>
+
+      <QuickCheck />
 
       <section className={styles.inputCard} aria-labelledby="file-input-title">
         <div>

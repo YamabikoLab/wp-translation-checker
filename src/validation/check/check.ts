@@ -1,8 +1,9 @@
 /**
- * 1回の翻訳確認について、PO Interpretation、Locale Resolution、日本語 v1 Check を順に接続する責任を持つ。
+ * 翻訳確認の公開入口として、PO ファイル確認と正規化済み1件確認を既存の日本語検証へ接続する責任を持つ。
  *
- * 正常完了と、入力解析不能・ロケール判定不能・未対応ロケールを意味上区別し、
- * Presentation が1つの公開入口から確認全体の結果を受け取れるようにする。
+ * PO ファイル確認では解析とロケール判定を含む確認全体を扱い、1件確認では既に正規化された翻訳情報を
+ * 日本語翻訳スタイルガイドと Glossary の共通検証へ渡す。どちらも同じ正常完了結果を返し、
+ * 画面表示層が個別ルールの呼び出し方を持たなくてよい境界を提供する。
  */
 
 import { checkJapaneseGlossary } from '@/glossary/ja/check'
@@ -15,18 +16,25 @@ import { check } from '@/rules/ja/check'
 import type { TranslationCheckResult } from '@/rules/ja/check'
 
 /**
- * Check Orchestration が Presentation へ返す1回の確認結果を表す。
+ * 翻訳確認が正常完了した場合に画面表示層へ返す共通結果を表す。
  *
- * 正常完了では解釈済み entry と日本語チェック結果を返し、
- * 確認を正常完了できない状態は原因ごとの status で区別する。
+ * 確認対象の正規化済み翻訳情報と、日本語翻訳スタイルガイド・Glossary の確認結果を保持する。
+ */
+export type SuccessfulCheckResult = {
+  status: 'success'
+  entries: readonly TranslationEntry[]
+  results: readonly TranslationCheckResult[]
+  glossaryResults: readonly GlossaryCheckResult[]
+}
+
+/**
+ * PO ファイルから開始する1回の翻訳確認結果を表す。
+ *
+ * 正常完了時は共通の確認結果を返し、解析不能・ロケール判定不能・未対応ロケールは
+ * 画面表示層が利用者へ理由を示せるよう原因別の状態として返す。
  */
 export type CheckResult =
-  | {
-      status: 'success'
-      entries: readonly TranslationEntry[]
-      results: readonly TranslationCheckResult[]
-      glossaryResults: readonly GlossaryCheckResult[]
-    }
+  | SuccessfulCheckResult
   | {
       status: 'invalid-po'
     }
@@ -37,6 +45,32 @@ export type CheckResult =
       status: 'unsupported-locale'
       locale: string
     }
+
+/**
+ * 正規化済みの翻訳1件を、日本語翻訳スタイルガイドと Glossary の共通確認へ渡す。
+ *
+ * 1件確認の結果内では対象を先頭の entry として扱う一方、singular / plural の原文情報と
+ * 翻訳フォームの識別情報・文字列は保持し、PO ファイル確認と同じ検証結果契約を返す。
+ *
+ * @param entry 確認対象となる正規化済みの翻訳情報。
+ * @returns 対象1件と、日本語翻訳スタイルガイド・Glossary の確認結果。
+ */
+export function checkEntry(entry: TranslationEntry): SuccessfulCheckResult {
+  const normalizedEntry: TranslationEntry = {
+    ...entry,
+    entryIndex: 0,
+    source: entry.source,
+    translations: entry.translations,
+  }
+  const entries = [normalizedEntry]
+
+  return {
+    status: 'success',
+    entries,
+    results: check(entries),
+    glossaryResults: checkJapaneseGlossary(entries, JAPANESE_GLOSSARY),
+  }
+}
 
 /**
  * PO 文字列を1回の確認要求として処理し、確認全体の結果を返す。

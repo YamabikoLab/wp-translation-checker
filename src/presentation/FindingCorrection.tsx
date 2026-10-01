@@ -5,9 +5,7 @@
  */
 
 import { useState } from 'react'
-import { checkJapaneseGlossary } from '@/glossary/ja/check'
-import { JAPANESE_GLOSSARY } from '@/glossary/ja/glossary-data'
-import { check } from '@/rules/ja/check'
+import { checkEntry } from '@/check/check'
 import { ExpandableText } from './ExpandableText'
 import { createFindings, type Finding } from './presentation-model'
 import styles from './TranslationChecker.module.css'
@@ -88,18 +86,10 @@ export function FindingCorrection({ finding }: { finding: Finding }) {
         },
       ],
     }
-    const styleGuideResults = check([entry])
-    const glossaryResults = checkJapaneseGlossary([entry], JAPANESE_GLOSSARY)
-
     setState({
       status: 'checked',
       draftTranslation: state.draftTranslation,
-      result: createFindings({
-        status: 'success',
-        entries: [entry],
-        results: styleGuideResults,
-        glossaryResults,
-      }),
+      result: createFindings(checkEntry(entry)),
     })
   }
 

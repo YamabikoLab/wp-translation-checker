@@ -83,6 +83,42 @@
   padding: 28px;
 }
 
+.quickCheckCard {
+  margin-bottom: 24px;
+}
+
+.quickCheckField {
+  display: grid;
+  gap: 8px;
+  font-weight: 700;
+}
+
+.quickCheckField textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  padding: 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-background);
+  color: var(--color-text);
+  font: inherit;
+  line-height: 1.6;
+}
+
+.quickCheckStatus {
+  min-height: 1.5em;
+}
+
+.quickCheckStatus p {
+  margin: 0;
+}
+
+.quickCheckFindings {
+  display: grid;
+  gap: 20px;
+}
+
 .inputCard h2,
 .feedback h2,
 .summary h2,
@@ -143,6 +179,7 @@
 .findingCopyButton:focus-visible,
 .textToggle:focus-visible,
 .fileInput input:focus-visible,
+.quickCheckField textarea:focus-visible,
 .ruleFilter select:focus-visible,
 .guideReference a:focus-visible {
   outline: 3px solid var(--color-focus);
