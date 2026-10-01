@@ -82,9 +82,7 @@ function selectAndCheck(file: File) {
   fireEvent.change(fileInput, {
     target: { files: [file] },
   })
-  fireEvent.click(
-    within(fileSection).getByRole('button', { name: '確認する' }),
-  )
+  fireEvent.click(within(fileSection).getByRole('button', { name: '確認する' }))
 }
 
 describe('TranslationChecker', () => {
