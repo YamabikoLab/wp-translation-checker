@@ -1,8 +1,8 @@
 /**
  * WTC のトップ画面として、1件の直接入力確認と PO ファイル確認を並べ、確認結果を利用者へ表示する責任を持つ。
  *
- * 直接入力の状態は QuickCheck に委ね、PO ファイル確認の File API と画面状態だけをこの Presentation 境界に閉じる。
- * 個別ルールやロケール判定は再実装せず、Validation の公開入口を利用する。
+ * 直接入力の状態は QuickCheck に委ね、PO ファイル確認の File API と画面状態だけをこの画面表示境界に閉じる。
+ * 個別ルールやロケール判定は再実装せず、検証処理の公開入口を利用する。
  */
 
 import {
@@ -41,7 +41,7 @@ const MAX_PO_FILE_SIZE_BYTES = 20 * 1024 * 1024
 type CopyFeedback = 'success' | 'failure' | null
 
 /**
- * WTC v1 の直接入力確認、PO ファイル確認、PO 確認結果表示を構成する Presentation コンポーネント。
+ * WTC v1 の直接入力確認、PO ファイル確認、PO 確認結果表示を構成する画面コンポーネント。
  *
  * @returns 直接入力と PO ファイル確認の双方をブラウザー内で完結して利用できる翻訳確認画面。
  */
