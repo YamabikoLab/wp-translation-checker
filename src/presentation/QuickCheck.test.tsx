@@ -3,7 +3,7 @@
  */
 
 /**
- * 原文・翻訳文のクイックチェックについて、入力可否、既存 Validation Core の結果表示、入力上限、XSS 安全性を利用者操作から確認する。
+ * 原文・翻訳文のクイックチェックについて、入力可否、既存検証処理の結果表示、入力上限、XSS 安全性を利用者操作から確認する。
  */
 
 import { cleanup, fireEvent, render, screen } from '@testing-library/react'
