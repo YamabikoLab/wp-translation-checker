@@ -2,7 +2,8 @@
  * 原文と翻訳文を1件だけ直接入力し、PO ファイルを用意せず日本語翻訳スタイルガイドと Glossary を確認する責任を持つ。
  *
  * 入力、入力制限、確認結果はこのコンポーネント内だけで扱い、PO ファイル確認の状態管理や
- * 結果の保存・共有機能へ混在させない。利用者が入力を変更した場合は、変更前の確認結果を現在の入力結果として残さない。
+ * ファイル・クリップボードへの出力機能へ混在させない。利用者が入力を変更した場合は、
+ * 変更前の確認結果を現在の入力結果として残さない。
  */
 
 import { useState } from 'react'
@@ -147,7 +148,11 @@ export function QuickCheck() {
       {result.status === 'checked' && findings.length > 0 && (
         <div className={styles.quickCheckFindings}>
           {findings.map((finding) => (
-            <FindingCard key={finding.key} finding={finding} />
+            <FindingCard
+              key={finding.key}
+              finding={finding}
+              showMarkdownCopy={false}
+            />
           ))}
         </div>
       )}
