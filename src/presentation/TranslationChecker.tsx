@@ -27,6 +27,7 @@ import { CheckScopeGuide } from './CheckScopeGuide'
 import { Feedback } from './Feedback'
 import { FindingCard } from './FindingCard'
 import { PaginationControls } from './PaginationControls'
+import { QuickCheck } from './QuickCheck'
 import { serializeCsv, serializeJson, serializeMarkdown } from './result-export'
 import styles from './TranslationChecker.module.css'
 
@@ -267,9 +268,11 @@ export function TranslationChecker() {
           の登録訳語をブラウザー内で確認します。
         </p>
         <p className={styles.privacy}>
-          選択した翻訳内容は外部の確認サービスへ送信しません。
+          入力・選択した翻訳内容は外部の確認サービスへ送信しません。
         </p>
       </header>
+
+      <QuickCheck />
 
       <section className={styles.inputCard} aria-labelledby="file-input-title">
         <div>
